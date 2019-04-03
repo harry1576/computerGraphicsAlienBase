@@ -61,7 +61,7 @@ void loadGLTextures()				// Load bitmaps And Convert To Textures
 
 	// *** down ***
 	glBindTexture(GL_TEXTURE_2D, texId[5]);
-	loadTGA("down.tga");
+	loadTGA("down2.tga");
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MIN_FILTER,GL_LINEAR);	
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);	
@@ -78,6 +78,7 @@ void skybox(){
   ////////////////////// LEFT WALL ///////////////////////
   glBindTexture(GL_TEXTURE_2D, texId[0]);
   //glColor3f(1, 0, 0);    //<<<<<<<<<<<< Remove the statements that assign color to the sides of the cube
+  
   glBegin(GL_QUADS);
   glTexCoord2f(0.0, 0.0);
   glVertex3f(-1000,  0, 1000);
@@ -103,7 +104,7 @@ void skybox(){
   glVertex3f(-1000,  1000, -1000);
   glEnd();
 
- ////////////////////// RIGHT WALL ///////////////////////
+ //////////////////////// RIGHT WALL ///////////////////////
   glBindTexture(GL_TEXTURE_2D, texId[2]);
   glColor3f(0, 0, 1);
   glBegin(GL_QUADS);
@@ -118,7 +119,7 @@ void skybox(){
   glEnd();
 
 
-  ////////////////////// REAR WALL ////////////////////////
+  //////////////////////// REAR WALL ////////////////////////
   glBindTexture(GL_TEXTURE_2D, texId[3]);
   glColor3f(1, 1, 0);
   glBegin(GL_QUADS);
@@ -132,13 +133,17 @@ void skybox(){
   glVertex3f( 1000, 1000, 1000);
   glEnd();
   
-  /////////////////////// TOP //////////////////////////
+  ///////////////////////// TOP //////////////////////////
   glBindTexture(GL_TEXTURE_2D, texId[4]);
   glColor3f(1, 0, 1);
   glBegin(GL_QUADS);
+  glTexCoord2f(1.0, 0.0);
   glVertex3f(-1000, 1000, -1000);
+  glTexCoord2f(1.0, 1.0);
   glVertex3f(1000, 1000,  -1000);
+  glTexCoord2f(0.0, 1.0);
   glVertex3f(1000, 1000,  1000);
+  glTexCoord2f(0.0, 0.0);
   glVertex3f(-1000, 1000, 1000);
   glEnd();
   
@@ -146,9 +151,13 @@ void skybox(){
   glBindTexture(GL_TEXTURE_2D, texId[5]);
   glColor3f(0, 1, 1);
   glBegin(GL_QUADS);
+  glTexCoord2f(1.0, 1.0);
   glVertex3f(-1000, 0., 1000);
+  glTexCoord2f(1.0, 0.0);
   glVertex3f(1000, 0.,  1000);
+  glTexCoord2f(0.0, 0.0);
   glVertex3f(1000, 0., -1000);
+  glTexCoord2f(0.0, 1.0);
   glVertex3f(-1000, 0., -1000);
   glEnd();
   
@@ -201,7 +210,7 @@ int main(int argc, char** argv)
 {
    glutInit(&argc, argv);
    glutInitDisplayMode (GLUT_SINGLE | GLUT_DEPTH );
-   glutInitWindowSize (700, 700); 
+   glutInitWindowSize (900, 720); 
    glutInitWindowPosition (50, 50);
 
    glutCreateWindow ("Sky Box");
