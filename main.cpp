@@ -237,7 +237,6 @@ void display(void)
 
 	 glPushMatrix();
         glTranslatef(100, 575, 0);
-
 		drawRocket();
     glPopMatrix();
 

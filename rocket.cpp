@@ -15,21 +15,32 @@ void normal(float x1, float y1, float z1,
 
 void drawRocket()
 {	
+	int N = 15;
 	
 	
-	int N = 10;
+	float vx[N] = {0,1, 2, 3, 4, 5, 6, 7, 8, 9,8,7,5,4,3};
+	float vy[N] = {0,-0.5,-2,-3.5,-8,-12.5,-18,-24.5,-32,-40.5,-49,-56.5,-63,-68.5,-73};
+	float vz[N] = {0};
+	
+	// y = -0.5q^2
+	// x = -q
+	
 	
 
-	float vx[N], vy[N], vz[N];
+
 	float wx[N], wy[N], wz[N];
 	
 	
-	for(int q = 1; q < N; q++)
-	{
+	//for(int q = 1; q < N - 1; q++)
+	//{
 	
-		vx[q] = -q;
-		vy[q] = -0.2*(q*q) ;
-	}
+		//vx[q] = -q;
+		//vy[q] = -0.5*(q*q) ;
+	//}
+	
+	//vx[9] = vx[8];
+	//vy[9] = 100;
+	
 	
 
     
