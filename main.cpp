@@ -9,6 +9,7 @@
 #include <GL/freeglut.h>
 #include <cmath>
 #include "loadTGA.h"
+#include "castle.cpp"
 using namespace std;
 
 #define GL_CLAMP_TO_EDGE 0x812F   //To get rid of seams between textures
@@ -22,11 +23,11 @@ float cam_hgt = 500; //Camera height
 
 
 
-GLuint texId[6];
+GLuint texId[7];
 
 void loadGLTextures()				// Load bitmaps And Convert To Textures
 {
-	glGenTextures(6, texId); 		// Create texture ids
+	glGenTextures(7, texId); 		// Create texture ids
 	// *** left ***
 	glBindTexture(GL_TEXTURE_2D, texId[0]);
 	loadTGA("left.tga");
@@ -74,6 +75,16 @@ void loadGLTextures()				// Load bitmaps And Convert To Textures
 	glTexParameteri(GL_TEXTURE_2D,GL_TEXTURE_MAG_FILTER,GL_LINEAR);
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);	
 	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	
+
+    glBindTexture(GL_TEXTURE_2D, texId[6]);
+    loadTGA("wall2.tga");  
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+	glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT); 
+
 
 	glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_REPLACE);
 }
@@ -202,7 +213,9 @@ void display(void)
 	//gluLookAt (eye_x, 500, eye_z, xlook, 500, zlook, 0, 1, 0);  //camera rotation
 	
 	glColor3f(1, 0, 1);
-
+	
+	drawCastle();
+	
 	glPushMatrix();
 		glColor3f(0, 1, 1);
         glTranslatef(0, 500, 0);
