@@ -17,8 +17,8 @@ float lookAngle = 0.0;		//Camera rotation
 float eye_z, eye_x;
 double distance_from_origin = 0;
 double angle = 0;  //Rotation angle for viewing
-double player_x = 0;
-double player_z = 0;
+double player_x = -15;
+double player_z = 166;
 float cam_hgt = 500; //Camera height
 
 
@@ -180,6 +180,7 @@ void skybox(){
   glVertex3f(-1000, 0., -1000);
   glEnd();
   
+  
   glDisable(GL_TEXTURE_2D);
 
   
@@ -198,7 +199,7 @@ void initialise(void)
     glMatrixMode (GL_PROJECTION);
     glLoadIdentity ();
     //gluPerspective(50.0, 1, 100.0, 2000.0);   //Perspective projection
-    glFrustum(-10, 10, -10, 10, 10, 2000);  //The camera view volume
+    glFrustum(-4, 4, -4, 4, 6, 2000);  //The camera view volume
 
 }
 
@@ -220,22 +221,16 @@ void display(void)
 	glPushMatrix();
         glTranslatef(0, 490, 0);
         glScalef (1,1,1);
-		drawCastle();
+		drawCastle2();
     glPopMatrix();
     
+  
+
 	skybox();
 	 
 	glEnable(GL_TEXTURE_2D);
+	//glBindTexture(GL_TEXTURE_2D, texId[6]);
 
-	glBindTexture(GL_TEXTURE_2D, texId[6]);
-	
-	
-	glScalef (40, 30, 6);
-	
-
-	
-
-	
 	glutSwapBuffers();
 }
 
