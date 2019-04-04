@@ -227,16 +227,16 @@ void display(void)
     
  	glPushMatrix();
         glTranslatef(0, 490, 0);
-        glScalef (1,1,1);
+        glScalef (2,2,2);
 		drawCastle();
     glPopMatrix();
     
-
 	skybox();
 	 
-
-	 glPushMatrix();
-        glTranslatef(100, 575, 0);
+	glPushMatrix();
+	
+        glTranslatef(0, 600, -80);
+        glScalef(1.5,1.5,1.5);
 		drawRocket();
     glPopMatrix();
 
