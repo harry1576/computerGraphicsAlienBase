@@ -197,7 +197,9 @@ void initialise(void)
 
     glMatrixMode (GL_PROJECTION);
     glLoadIdentity ();
-    gluPerspective(60.0, 1, 100.0, 2000.0);   //Perspective projection
+    //gluPerspective(50.0, 1, 100.0, 2000.0);   //Perspective projection
+    glFrustum(-10, 10, -10, 10, 10, 2000);  //The camera view volume
+
 }
 
 //---------------------------------------------------------------------
@@ -213,17 +215,25 @@ void display(void)
 	//gluLookAt (eye_x, 500, eye_z, xlook, 500, zlook, 0, 1, 0);  //camera rotation
 	
 	glColor3f(1, 0, 1);
-	
-	drawCastle();
+
 	
 	glPushMatrix();
-		glColor3f(0, 1, 1);
-        glTranslatef(0, 500, 0);
-        glScalef (40, 30, 6);
-        glutSolidTeapot(1);
+        glTranslatef(0, 490, 0);
+        glScalef (1,1,1);
+		drawCastle();
     glPopMatrix();
     
 	skybox();
+	 
+	glEnable(GL_TEXTURE_2D);
+
+	glBindTexture(GL_TEXTURE_2D, texId[6]);
+	
+	
+	glScalef (40, 30, 6);
+	
+
+	
 
 	
 	glutSwapBuffers();

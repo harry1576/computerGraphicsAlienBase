@@ -1,4 +1,4 @@
-#include "main.cpp"
+
 
 // ---------- draw the castle -------------------
 void drawCastle()
@@ -9,9 +9,7 @@ void drawCastle()
     int cubeSize = 2;
     
 
-
 	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, texId[6]);
 
     glBegin(GL_QUADS);
     glDisable(GL_TEXTURE_2D);
@@ -288,8 +286,7 @@ void drawCastle()
         }
     }
   
-        glFlush();
-
+   
    
 
 }
