@@ -14,6 +14,12 @@ using namespace std;
 #define GL_CLAMP_TO_EDGE 0x812F   //To get rid of seams between textures
 float lookAngle = 0.0;		//Camera rotation
 float eye_z, eye_x;
+double distance_from_origin = 0;
+double angle = 0;  //Rotation angle for viewing
+double player_x = 0;
+double player_z = 0;
+float cam_hgt = 500; //Camera height
+
 
 
 GLuint texId[6];
@@ -75,8 +81,8 @@ void loadGLTextures()				// Load bitmaps And Convert To Textures
 //========================================================================================
 
 void skybox(){
-	glEnable(GL_TEXTURE_2D);
-
+	
+  glEnable(GL_TEXTURE_2D);
   ////////////////////// LEFT WALL ///////////////////////
   glBindTexture(GL_TEXTURE_2D, texId[0]);
   //glColor3f(1, 0, 0);    //<<<<<<<<<<<< Remove the statements that assign color to the sides of the cube
@@ -163,6 +169,9 @@ void skybox(){
   glVertex3f(-1000, 0., -1000);
   glEnd();
   
+  glDisable(GL_TEXTURE_2D);
+
+  
 }
 
 //---------------------------------------------------------------------
@@ -177,47 +186,75 @@ void initialise(void)
 
     glMatrixMode (GL_PROJECTION);
     glLoadIdentity ();
-    gluPerspective(80.0, 1.0, 100.0, 5000.0);   //Perspective projection
+    gluPerspective(60.0, 1, 100.0, 2000.0);   //Perspective projection
 }
 
 //---------------------------------------------------------------------
 void display(void)
 {
-	float xlook, zlook;
-	float cdr=3.14159265/180.0;	//Conversion from degrees to radians
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
 	glMatrixMode(GL_MODELVIEW);
 	glLoadIdentity();
-	xlook = -100.0*sin(lookAngle*cdr);
-	zlook = -100.0*cos(lookAngle*cdr);
-	gluLookAt (eye_x, 500, eye_z, xlook, 500, zlook, 0, 1, 0);  //camera rotation
+
+	
+	gluLookAt(player_x, cam_hgt, player_z, player_x + cos(-angle * (M_PI/180)), cam_hgt, player_z + sin(-angle * (M_PI/180)), 0, 1, 0);
+
+	//gluLookAt (eye_x, 500, eye_z, xlook, 500, zlook, 0, 1, 0);  //camera rotation
 	
 	glColor3f(1, 0, 1);
 
-	glutSolidTeapot(10);
+	glPushMatrix();
+		glColor3f(0, 1, 1);
+        glTranslatef(0, 500, 0);
+        glScalef (40, 30, 6);
+        glutSolidTeapot(1);
+    glPopMatrix();
+    
 	skybox();
 
-	glFlush();
+	
+	glutSwapBuffers();
 }
 
 //--------------------------------------------------------------
  void special(int key, int x, int y)
  {
-    if(key==GLUT_KEY_LEFT) lookAngle+=5;		 //Turn left
-    else if(key==GLUT_KEY_RIGHT) lookAngle-=5;   //Turn right
-    else if(key == GLUT_KEY_DOWN)
-    {  //Move backward
-        eye_x -= 0.1*sin(lookAngle);
-        eye_z += 0.1*cos(lookAngle);
+    if(key == GLUT_KEY_LEFT)
+    {
+        angle+= 5;
+        glTranslatef(-(cos(angle*(3.14/180))* distance_from_origin),0,-(sin(angle*(3.14/180))* distance_from_origin));
+        glRotatef(angle, 0.0, 1.0, 0.0);        //rotate the whole scene
+        glTranslatef((cos(angle*(3.14/180))* distance_from_origin),0,-(sin(angle*(3.14/180))* distance_from_origin));
+
+    }
+    else if(key == GLUT_KEY_RIGHT)
+    {
+        angle-= 5;
+        glTranslatef(-(cos(angle*(3.14/180))* distance_from_origin),0,-(sin(angle*(3.14/180))* distance_from_origin));
+        glRotatef(angle, 0.0, 1.0, 0.0);        //rotate the whole scene
+        glTranslatef((cos(angle*(3.14/180))* distance_from_origin),0,-(sin(angle*(3.14/180))* distance_from_origin));
+
     }
     else if(key == GLUT_KEY_UP)
-    { //Move forward
-        eye_x += 0.1*sin(lookAngle);
-        eye_z -= 0.1*cos(lookAngle);
+    {
+        player_x += cos(-angle * (M_PI/180));glMatrixMode(GL_MODELVIEW);
+        player_z += sin(-angle * (M_PI/180));
+        distance_from_origin = pow(pow(player_x,2) + pow(player_z,2),0.5) ;
     }
+    else if(key == GLUT_KEY_DOWN)
+    {
+        player_x += cos(-(angle-180) * (M_PI/180));
+        player_z += sin(-(angle-180) * (M_PI/180));
+        distance_from_origin = pow(pow(player_x,2) + pow(player_z,2),0.5) ;
+    }
+    
+    
+    glTranslatef((cos(angle*(3.14/180))* distance_from_origin),0,-(sin(angle*(3.14/180))* distance_from_origin));
 
-	glutPostRedisplay();
+
+    cout << "X " << player_x  << "Z " << player_z << "Angle " << angle << endl;
+    glutPostRedisplay();
+
 }
 //-------------------------------------------------------------------
 
