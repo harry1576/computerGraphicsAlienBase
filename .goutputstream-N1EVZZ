@@ -27,8 +27,8 @@ void drawRocket()
 	for(int q = 1; q < N; q++)
 	{
 	
-		vx[q] = -q;
-		vy[q] = -0.2*(q*q) ;
+		vx[q] = -q*0.1;
+		vy[q] = -2(q*q) ;
 	}
 	
 
