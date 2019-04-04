@@ -10,6 +10,7 @@
 #include <cmath>
 #include "loadTGA.h"
 #include "castle.cpp"
+#include "rocket.cpp"
 using namespace std;
 
 #define GL_CLAMP_TO_EDGE 0x812F   //To get rid of seams between textures
@@ -219,17 +220,30 @@ void display(void)
 
 	
 	glPushMatrix();
-        glTranslatef(0, 490, 0);
+        glTranslatef(0, 50, 0);
         glScalef (1,1,1);
 		drawCastle2();
     glPopMatrix();
     
-  
+ 	glPushMatrix();
+        glTranslatef(0, 490, 0);
+        glScalef (1,1,1);
+		drawCastle();
+    glPopMatrix();
+    
 
 	skybox();
 	 
-	glEnable(GL_TEXTURE_2D);
+
+	 glPushMatrix();
+        glTranslatef(100, 510, 0);
+		drawRocket();
+    glPopMatrix();
+
+
+	//glEnable(GL_TEXTURE_2D);
 	//glBindTexture(GL_TEXTURE_2D, texId[6]);
+
 
 	glutSwapBuffers();
 }

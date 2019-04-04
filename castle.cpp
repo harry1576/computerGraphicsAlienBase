@@ -10,8 +10,7 @@ void drawCastle2()
 	
     GLfloat lightpos[] = {.5, 1., 1., 0.};
     glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
-    int cubeSize = 2;
-    
+   
 
 	glEnable(GL_TEXTURE_2D);
 
@@ -43,10 +42,8 @@ void drawCastle()
     int cubeSize = 2;
     
 
-	glEnable(GL_TEXTURE_2D);
 
     glBegin(GL_QUADS);
-    glDisable(GL_TEXTURE_2D);
     glColor3f(0.00f, 0.00f, 1.0f);
 	
 	glTexCoord2f(0., 3.); 
