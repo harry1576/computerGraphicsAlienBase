@@ -13,6 +13,8 @@ using namespace std;
 
 #define GL_CLAMP_TO_EDGE 0x812F   //To get rid of seams between textures
 float lookAngle = 0.0;		//Camera rotation
+float eye_z, eye_x;
+
 
 GLuint texId[6];
 
@@ -189,8 +191,11 @@ void display(void)
 	glLoadIdentity();
 	xlook = -100.0*sin(lookAngle*cdr);
 	zlook = -100.0*cos(lookAngle*cdr);
-	gluLookAt (0, 500, 0, xlook, 500, zlook, 0, 1, 0);  //camera rotation
+	gluLookAt (eye_x, 500, eye_z, xlook, 500, zlook, 0, 1, 0);  //camera rotation
+	
+	glColor3f(1, 0, 1);
 
+	glutSolidTeapot(10);
 	skybox();
 
 	glFlush();
@@ -201,6 +206,16 @@ void display(void)
  {
     if(key==GLUT_KEY_LEFT) lookAngle+=5;		 //Turn left
     else if(key==GLUT_KEY_RIGHT) lookAngle-=5;   //Turn right
+    else if(key == GLUT_KEY_DOWN)
+    {  //Move backward
+        eye_x -= 0.1*sin(lookAngle);
+        eye_z += 0.1*cos(lookAngle);
+    }
+    else if(key == GLUT_KEY_UP)
+    { //Move forward
+        eye_x += 0.1*sin(lookAngle);
+        eye_z -= 0.1*cos(lookAngle);
+    }
 
 	glutPostRedisplay();
 }
