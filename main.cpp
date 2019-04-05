@@ -22,8 +22,6 @@ double player_x = -15;
 double player_z = 166;
 float cam_hgt = 500; //Camera height
 
-
-
 GLuint texId[7];
 
 void stars(GLfloat x, GLfloat y, GLfloat z){
@@ -96,6 +94,96 @@ void loadGLTextures()               // Load bitmaps And Convert To Textures
 
 
     glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_REPLACE);
+}
+
+void drawRocket()
+{	
+	int N = 9;
+	
+	float vy[N] = {-18,-15, -10, -6, 0.0};
+	float vx[N] = {0,26.25,45,56.25,60,56.25};
+	float vz[N] = {0};
+
+	float wx[N], wy[N], wz[N];
+	
+    
+    for(int j = 0; j < 36; j++)
+    {
+    for(int i = 0; i < N; i++)
+    {
+        wx[i]= vx[i] * cos(10*(M_PI/180)) + vz[i] * sin(10*(M_PI/180));
+        wy[i] = vy[i];
+        wz[i] = -vx[i] * sin(10*(M_PI/180)) + vz[i] * cos(10*(M_PI/180));
+
+    }
+
+    glBegin(GL_TRIANGLE_STRIP);
+
+
+        for(int i = 0; i < N; i++)
+        {
+
+            if(i > 0)
+            {
+            normal( wx[i-1], wy[i-1], wz[i-1],vx[i-1], vy[i-1], vz[i-1],vx[i], vy[i], vz[i]);
+            }
+
+            glVertex3f(vx[i], vy[i], vz[i]);
+            if(i > 0)
+            {
+                normal( wx[i-1], wy[i-1], wz[i-1],vx[i], vy[i], vz[i],wx[i], wy[i], wz[i]);
+            }
+
+            glVertex3f(wx[i], wy[i], wz[i]);
+        }
+        for(int i = 0; i < N; i++)
+        {
+            vx[i] = wx[i];
+            vy[i] = wy[i];
+            vz[i] = wz[i];
+        }
+    }
+
+	
+     glEnd();
+     
+     for( int x = 0; x < 360; x+= 60)
+     {
+     glPushMatrix();
+     	glRotatef(x,  0,  1,  0);
+
+		 glTranslatef(30, 0, 0);
+		 glPushMatrix();
+			 
+			 glTranslatef(0, -20, 0);
+			 glColor3f(1.00f, 0.00f, 1.0f);
+			 glRotatef(30,  0,  0,  1);
+			 glScalef (3,40,3);
+			 glutSolidCube(1);
+		glPopMatrix();
+		glPushMatrix();
+			glTranslatef(9.5, -38, 0);
+			glRotatef(90,  1,  0,  0);
+			glutSolidTorus(3,3,10, 10);
+		glPopMatrix();
+	glPopMatrix();
+	}
+	
+
+
+
+    
+	 
+	 glPushMatrix();
+	     
+	     glTranslatef(0, 3, 0);
+	     glColor3f(1.00f, 0.00f, 1.0f);
+	     glutSolidSphere(20,50,50);
+	     
+	glPopMatrix();
+
+    
+    glFlush();
 }
 
 //========================================================================================
@@ -242,9 +330,12 @@ void display(void)
     skybox();
 
     glPushMatrix();
-        glTranslatef(0, 500, -80);
-        glScalef(2,4,2);
+
+        glTranslatef(0, 530, -40);
+        glScalef (1,1,1);
         drawRocket();
+		glColor3f(1.00f, 1.00f, 0.00f);
+
     glPopMatrix();
     // no marks for code?
 
@@ -301,7 +392,7 @@ void display(void)
     glTranslatef((cos(angle*(3.14/180))* distance_from_origin),0,-(sin(angle*(3.14/180))* distance_from_origin));
 
 
-    //cout << "X " << player_x  << "Z " << player_z << "Angle " << angle << endl;
+    cout << "X " << player_x  << "Z " << player_z << "Angle " << angle << endl;
     glutPostRedisplay();
 
 }
