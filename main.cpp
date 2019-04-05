@@ -34,7 +34,7 @@ void stars(GLfloat x, GLfloat y, GLfloat z){
 
 void loadGLTextures()               // Load bitmaps And Convert To Textures
 {
-    glGenTextures(7, texId);        // Create texture ids
+    glGenTextures(8, texId);        // Create texture ids
     // *** left ***
     glBindTexture(GL_TEXTURE_2D, texId[0]);
     loadTGA("left.tga");
@@ -91,9 +91,16 @@ void loadGLTextures()               // Load bitmaps And Convert To Textures
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+	
+	
+	glBindTexture(GL_TEXTURE_2D, texId[7]);
+    loadTGA("alien3.tga");
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
 
 
-    glTexEnvi(GL_TEXTURE_ENV,GL_TEXTURE_ENV_MODE,GL_REPLACE);
 }
 
 void drawRocket()
@@ -453,15 +460,20 @@ void drawCastle()
 
 	
 	glPushMatrix();
+	   
+
 		glBegin(GL_QUADS);
+		
 		glVertex3f(-5,12, 56.01);
 		glVertex3f(5,12, 56.01);
 		glVertex3f(5,35, 56.01);
 		glVertex3f(-5,35, 56.01);
+		
 		glEnd();
 	glPopMatrix();
 	
 	glPushMatrix();
+	
 		glBegin(GL_TRIANGLES);
 		glVertex3f(-5,12, 56.01);
 		glVertex3f(0,8, 56.01);
@@ -487,6 +499,45 @@ void drawCastle()
 		glVertex3f(5,12,  53.99);
 		glEnd();
 	glPopMatrix();
+	
+	
+	glPushMatrix();
+	glBindTexture(GL_TEXTURE_2D, texId[7]);
+		glEnable(GL_TEXTURE_2D);
+		glBegin(GL_QUADS);
+		
+		glTexCoord2f(1, 1); 
+		glVertex3f(-3,17.5, 56.02);
+		glTexCoord2f(0., 1.0); 
+		glVertex3f(3,17.5, 56.02);
+		glTexCoord2f(0., 0.); 
+		glVertex3f(3,30, 56.02);
+		glTexCoord2f(1, 0.0); 
+		glVertex3f(-3,30, 56.02);
+		
+		glEnd();
+	glPopMatrix();
+	
+	
+	glPushMatrix();
+	glBindTexture(GL_TEXTURE_2D, texId[7]);
+		glEnable(GL_TEXTURE_2D);
+		glBegin(GL_QUADS);
+		
+		glTexCoord2f(1, 1); 
+		glVertex3f(-3,17.5, 53.98);
+		glTexCoord2f(0., 1.0); 
+		glVertex3f(3,17.5, 53.98);
+		glTexCoord2f(0., 0.); 
+		glVertex3f(3,30, 53.98);
+		glTexCoord2f(1, 0.0); 
+		glVertex3f(-3,30, 53.98);
+		
+		glEnd();
+	glPopMatrix();
+
+	
+	glDisable(GL_TEXTURE_2D);
 
 
 
