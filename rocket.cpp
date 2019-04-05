@@ -15,15 +15,14 @@ void normal(float x1, float y1, float z1,
 
 void drawRocket()
 {	
-	int N = 15;
+	int N = 9;
 	
-	float vy[N] = {-2,-1.5, -1, -0.5, 0.0};
-	float vx[N] = {0,8.75,15,18.75,20};
+	float vy[N] = {-2,-1.5, -1, -0.5, 0.0,0.5,1,1.5,2};
+	float vx[N] = {0,8.75,15,18.75,20,18.75,15,8.75,0};
 	float vz[N] = {0};
 	
 	// y = -0.5q^2
 	// x = -q
-	
 	
 
 
@@ -81,9 +80,14 @@ void drawRocket()
         }
     }
 
-	
 
 	
     glEnd();
+    
+     glColor3f(0.00f, 1.00f, 1.0f);
+
+    glutSolidSphere(100,10,1);
+
+    
     glFlush();
 }
