@@ -242,9 +242,8 @@ void display(void)
     skybox();
 
     glPushMatrix();
-
-        glTranslatef(0, 600, -80);
-        glScalef(1.5,1.5,1.5);
+        glTranslatef(0, 500, -80);
+        glScalef(2,4,2);
         drawRocket();
     glPopMatrix();
     // no marks for code?
