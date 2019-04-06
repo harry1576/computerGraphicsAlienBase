@@ -29,6 +29,7 @@ float cam_hgt = 500; //Camera height
 
 double cannonBallY	= 4;
 double cannonBallZ  = 68;
+int cannonFiring = 0;
 
 float *x, *y, *z;  //vertex coordinate arrays
 int *t1, *t2, *t3; //triangles
@@ -846,13 +847,17 @@ void cannonAnimation(int time)
 {
 
     glutPostRedisplay();
-    
-    cannonBallZ += cos(30*(3.1415/180)) * 1.5 -  (  cos(30*(3.1415/180)) * 1.5 * 0.1);
+    cannonFiring = 1;
+    cannonBallZ += cos(30*(3.1415/180)) * 1.5 -  (  cos(30*(3.1415/180)) * 1.5 * 0.1) ;
     cannonBallY += (sin(30*(3.1415/180)) * 1.5) - (9.81 * 0.5 * pow(time*0.001,2));
     time += 10;
-    if (cannonBallY > 0)
+    if (cannonBallY > -1)
     {
-    glutTimerFunc(1,cannonAnimation,time);
+    glutTimerFunc(10,cannonAnimation,time);
+	}
+	else
+	{
+	    cannonFiring = 0;
 	}
 	
 
@@ -919,7 +924,7 @@ void display(void)
     
     glPushMatrix();
         glTranslatef(00, 490, 200);
-		drawScorpion();
+		//drawScorpion();
     glPopMatrix();
     
     glPushMatrix();
@@ -947,7 +952,7 @@ void display(void)
 
 void keyBoard (unsigned char key, int x, int y)
 {
-	if (key == 'c')
+	if (key == 'c' && cannonFiring == 0)
 	{
 		cannonBallY	= 4;
 		cannonBallZ  = 68;
@@ -1010,6 +1015,8 @@ int main(int argc, char** argv)
    initialise();
    glutDisplayFunc(display);
    glutSpecialFunc(special);
+   glutKeyboardFunc(keyBoard);
+
 
    glutMainLoop();
    return 0;
