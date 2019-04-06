@@ -26,10 +26,13 @@ double angle = 0;  //Rotation angle for viewing
 double player_x = -15;
 double player_z = 166;
 float cam_hgt = 500; //Camera height
+int rocketRotation = 0;
 
 double cannonBallY	= 4;
 double cannonBallZ  = 68;
 int cannonFiring = 0;
+int rocketFeetAngle = 0;
+int liftOff = 0;
 
 float *x, *y, *z;  //vertex coordinate arrays
 int *t1, *t2, *t3; //triangles
@@ -201,6 +204,8 @@ void drawRocket()
 
 	float wx[N], wy[N], wz[N];
 	
+	glRotatef(rocketRotation,  0,  1,  0);
+
     
     for(int j = 0; j < 36; j++)
     {
@@ -241,13 +246,16 @@ void drawRocket()
 
 	
      glEnd();
-     
      for( int x = 0; x < 360; x+= 60)
      {
      glPushMatrix();
      	glRotatef(x,  0,  1,  0);
-
 		 glTranslatef(30, 0, 0);
+		 
+		 glTranslatef(0, -rocketFeetAngle*0.03, 0);
+
+		 glRotatef(rocketFeetAngle,  0,  0,  1);
+
 		 glPushMatrix();
 			 
 			 glTranslatef(0, -20, 0);
@@ -264,17 +272,21 @@ void drawRocket()
 	glPopMatrix();
 	}
 	
-
-
-
-    
-	 
-	 glPushMatrix();
+	glPushMatrix();
 	     
 	     glTranslatef(0, 3, 0);
 	     glColor3f(1.00f, 0.00f, 1.0f);
 	     glutSolidSphere(20,50,50);
 	     
+	glPopMatrix();
+
+	glPushMatrix();
+		 
+		 glTranslatef(0, -17, 0);
+		 glRotatef(90,  1,  0,  0);
+	     glColor3f(1.00f, 0.00f, 0.00f);
+		 glutSolidTorus(5,8,10, 10);
+		 
 	glPopMatrix();
 
     
@@ -845,7 +857,6 @@ void drawScorpion()
 
 void cannonAnimation(int time)
 {
-
     glutPostRedisplay();
     cannonFiring = 1;
     cannonBallZ += cos(30*(3.1415/180)) * 1.5 -  (  cos(30*(3.1415/180)) * 1.5 * 0.1) ;
@@ -859,8 +870,24 @@ void cannonAnimation(int time)
 	{
 	    cannonFiring = 0;
 	}
-	
+}
 
+void RocketFeetAnimation(int time)
+{
+	
+    glutPostRedisplay();
+	if (rocketFeetAngle < 70)
+	{
+			rocketFeetAngle += 3;
+			glutTimerFunc(35,RocketFeetAnimation,0);
+	}
+	else
+	{
+		rocketRotation += 5;
+		glutTimerFunc(30,RocketFeetAnimation,0);
+	
+	}
+	
 }
 
 //---------------------------------------------------------------------
@@ -935,11 +962,14 @@ void display(void)
 
 
     //
-    //glPointSize(500.0);
-    //glBegin(GL_POINTS);
-      //glVertex3f(0, 500,0);
-    //glEnd();
-
+    
+    glPointSize(10.0);
+    for(int x = 0; x < 300; x++)
+    {
+		glBegin(GL_POINTS);
+			glVertex3f(0, 500,0);
+		glEnd();
+	}	
 
 
 
@@ -957,6 +987,12 @@ void keyBoard (unsigned char key, int x, int y)
 		cannonBallY	= 4;
 		cannonBallZ  = 68;
 		glutTimerFunc(1,cannonAnimation,0);
+	   
+	}
+	if (key == 's' && liftOff == 0)
+	{
+
+		glutTimerFunc(1,RocketFeetAnimation,0);
 	   
 	}
 }  
@@ -1016,8 +1052,6 @@ int main(int argc, char** argv)
    glutDisplayFunc(display);
    glutSpecialFunc(special);
    glutKeyboardFunc(keyBoard);
-
-
    glutMainLoop();
    return 0;
 }
