@@ -207,7 +207,7 @@ void drawRocket()
 
 	float wx[N], wy[N], wz[N];
 	
-	glRotatef(rocketRotation,  0,  1,  0);
+	glRotatef(rocketRotation+45,  0,  1,  0);
 
     
     for(int j = 0; j < 36; j++)
@@ -249,7 +249,7 @@ void drawRocket()
 
 	
      glEnd();
-     for( int x = 0; x < 360; x+= 60)
+     for( int x = 0; x < 360; x+= 90)
      {
      glPushMatrix();
      	glRotatef(x,  0,  1,  0);
@@ -1007,21 +1007,36 @@ void display(void)
 	if (rocketThrust > 0)
 	{
 	glDisable(GL_LIGHTING);                  
-    glPointSize(4.5);
+    glPointSize(6.6);
     
-    for(int x = 0; x < 100; x++)
+    for(int x = 0; x < 250; x++)
     {	
+		
+		
+		//int xpoint = rand() % 5;
+		
+		//int ypoint = 0.5 * (xpoint * xpoint);
+		
+		double ypoint = (rand() % 250) * 0.1; //* (rand() % 100000)/100000;
+		
+		
+		double length = sqrt(ypoint) * (rand() % 1000 + 1) * 0.001;
+		
+		
+		cout << "y " << ypoint << endl;
 
-		int xpoint = rand() % 20 - 10;
-		int ypoint = rand() % 100 - 10;
-		int zpoint = rand() % 100 - 50;
+		
+		int theta = rand() % 360;
+		
+	
+		double xpoint = (length * sin(theta * (M_PI/180)));
+		double zpoint = (length * cos(theta * (M_PI/180)));
 		
 		
 		
 		int colourPicker = rand() % 5;
 
 		
-		//cout << "Colour " << colourPicker  << endl;
 		glBegin(GL_POINTS);
 
 		if (colourPicker == 0){glColor3f(0.95f, 1.00f, 0.06f);}
@@ -1030,13 +1045,12 @@ void display(void)
 		else if (colourPicker ==3){glColor3f(0.89f, 0.47f, 0.13);}
 		else if (colourPicker ==4){glColor3f(0.89f, 0.13f, 0.17f);}
 		
-		
-		
-		if (((abs(xpoint) * abs(xpoint)) + (abs(xpoint) * abs(xpoint))) < zpoint)
-		{
-			glVertex3f(-15 + xpoint, 520 + ypoint,-40 + zpoint);
-		}
 
+		
+		
+	    glVertex3d(xpoint, 495 + ypoint,zpoint-40);
+	    
+	    
 
 		glEnd();
 	}	
@@ -1069,17 +1083,17 @@ void keyBoard (unsigned char key, int x, int y)
     if(key == GLUT_KEY_LEFT)
     {
         angle+= 5;
-        glTranslatef(-(cos(angle*(3.14/180))* distance_from_origin),0,-(sin(angle*(3.14/180))* distance_from_origin));
+        glTranslatef(-(cos(angle*(3.14/180))* distance_from_origin),0,-(sin(angle*(M_PI/180))* distance_from_origin));
         glRotatef(angle, 0.0, 1.0, 0.0);        //rotate the whole scene
-        glTranslatef((cos(angle*(3.14/180))* distance_from_origin),0,-(sin(angle*(3.14/180))* distance_from_origin));
+        glTranslatef((cos(angle*(3.14/180))* distance_from_origin),0,-(sin(angle*(M_PI/180))* distance_from_origin));
 
     }
     else if(key == GLUT_KEY_RIGHT)
     {
         angle-= 5;
-        glTranslatef(-(cos(angle*(3.14/180))* distance_from_origin),0,-(sin(angle*(3.14/180))* distance_from_origin));
+        glTranslatef(-(cos(angle*(3.14/180))* distance_from_origin),0,-(sin(angle*(M_PI/180))* distance_from_origin));
         glRotatef(angle, 0.0, 1.0, 0.0);        //rotate the whole scene
-        glTranslatef((cos(angle*(3.14/180))* distance_from_origin),0,-(sin(angle*(3.14/180))* distance_from_origin));
+        glTranslatef((cos(angle*(3.14/180))* distance_from_origin),0,-(sin(angle*(M_PI/180))* distance_from_origin));
 
     }
     else if(key == GLUT_KEY_UP)
