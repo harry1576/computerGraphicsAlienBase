@@ -11,6 +11,11 @@
 #include "loadTGA.h"
 #include "castle.cpp"
 #include "rocket.cpp"
+
+#include <fstream>
+#include <climits>
+#include <math.h>
+
 using namespace std;
 
 #define GL_CLAMP_TO_EDGE 0x812F   //To get rid of seams between textures
@@ -22,6 +27,15 @@ double player_x = -15;
 double player_z = 166;
 float cam_hgt = 500; //Camera height
 
+double cannonBallY	= 4;
+double cannonBallZ  = 68;
+
+float *x, *y, *z;  //vertex coordinate arrays
+int *t1, *t2, *t3; //triangles
+int nvrt, ntri;    //total number of vertices and triangles
+
+
+
 GLuint texId[7];
 
 void stars(GLfloat x, GLfloat y, GLfloat z){
@@ -31,6 +45,46 @@ void stars(GLfloat x, GLfloat y, GLfloat z){
    glEnd();
 }
 
+//-- Loads mesh data in OFF format    -------------------------------------
+void loadMeshFile(const char* fname)
+{
+    ifstream fp_in;
+    int num, ne;
+
+    fp_in.open(fname, ios::in);
+    if(!fp_in.is_open())
+    {
+        cout << "Error opening mesh file" << endl;
+        exit(1);
+    }
+
+    fp_in.ignore(INT_MAX, '\n');                //ignore first line
+    fp_in >> nvrt >> ntri >> ne;                // read number of vertices, polygons, edges
+
+    x = new float[nvrt];                        //create arrays
+    y = new float[nvrt];
+    z = new float[nvrt];
+
+    t1 = new int[ntri];
+    t2 = new int[ntri];
+    t3 = new int[ntri];
+
+    for(int i=0; i < nvrt; i++)                         //read vertex list
+        fp_in >> x[i] >> y[i] >> z[i];
+
+    for(int i=0; i < ntri; i++)                         //read polygon list
+    {
+        fp_in >> num >> t1[i] >> t2[i] >> t3[i];
+        if(num != 3)
+        {
+            cout << "ERROR: Polygon with index " << i  << " is not a triangle." << endl;  //not a triangle!!
+            exit(1);
+        }
+    }
+
+    fp_in.close();
+    cout << " File successfully read." << endl;
+}
 
 void loadGLTextures()               // Load bitmaps And Convert To Textures
 {
@@ -103,6 +157,39 @@ void loadGLTextures()               // Load bitmaps And Convert To Textures
 
 }
 
+//--Function to compute the normal vector of a triangle with index tindx ----------
+void normal(int tindx)
+{
+    float x1 = x[t1[tindx]], x2 = x[t2[tindx]], x3 = x[t3[tindx]];
+    float y1 = y[t1[tindx]], y2 = y[t2[tindx]], y3 = y[t3[tindx]];
+    float z1 = z[t1[tindx]], z2 = z[t2[tindx]], z3 = z[t3[tindx]];
+    float nx, ny, nz;
+    nx = y1*(z2-z3) + y2*(z3-z1) + y3*(z1-z2);
+    ny = z1*(x2-x3) + z2*(x3-x1) + z3*(x1-x2);
+    nz = x1*(y2-y3) + x2*(y3-y1) + x3*(y1-y2);
+    glNormal3f(nx, ny, nz);
+}
+
+
+
+//-- Draws Cannon Mesh Model
+void drawCannonMesh()
+{
+    glColor3f(0.4, 0.5, 0.4);
+
+    //Construct the object model here using triangles read from OFF file
+    glBegin(GL_TRIANGLES);
+        for(int tindx = 0; tindx < ntri; tindx++)
+        {
+           normal(tindx);
+           glVertex3d(x[t1[tindx]], y[t1[tindx]], z[t1[tindx]]);
+           glVertex3d(x[t2[tindx]], y[t2[tindx]], z[t2[tindx]]);
+           glVertex3d(x[t3[tindx]], y[t3[tindx]], z[t3[tindx]]);
+        }
+    glEnd();
+}
+
+
 void drawRocket()
 {	
 	int N = 9;
@@ -132,13 +219,13 @@ void drawRocket()
 
             if(i > 0)
             {
-            normal( wx[i-1], wy[i-1], wz[i-1],vx[i-1], vy[i-1], vz[i-1],vx[i], vy[i], vz[i]);
+            normal2( wx[i-1], wy[i-1], wz[i-1],vx[i-1], vy[i-1], vz[i-1],vx[i], vy[i], vz[i]);
             }
 
             glVertex3f(vx[i], vy[i], vz[i]);
             if(i > 0)
             {
-                normal( wx[i-1], wy[i-1], wz[i-1],vx[i], vy[i], vz[i],wx[i], wy[i], wz[i]);
+                normal2( wx[i-1], wy[i-1], wz[i-1],vx[i], vy[i], vz[i],wx[i], wy[i], wz[i]);
             }
 
             glVertex3f(wx[i], wy[i], wz[i]);
@@ -190,10 +277,8 @@ void drawRocket()
 	glPopMatrix();
 
     
-    glFlush();
 }
 
-//========================================================================================
 
 void skybox(){
 
@@ -286,6 +371,64 @@ void skybox(){
 
 
   glDisable(GL_TEXTURE_2D);
+
+
+}
+
+
+void drawCannon()
+{
+
+   glPushMatrix();
+		glTranslatef(-10.0,cannonBallY, cannonBallZ);
+        glutSolidSphere(0.5, 10, 10);
+   glPopMatrix();
+	
+    glPushMatrix();
+
+        glTranslatef(-10, 0.2, 67);
+        glScalef(.1, .1, .1);
+        glRotatef(-30, 1, 0 ,0);
+        glRotatef(270, 0, 1, 0);
+        //glRotatef(180, 0, 0, 1);
+        drawCannonMesh();
+    glPopMatrix();
+
+    //--start here
+    glPushMatrix();
+    glTranslatef(-10.0, 0, 65);
+    glRotatef(90, 0, 1, 0);
+    glPushMatrix();
+        glColor3f(1.0,0, 0);
+        glTranslatef(-1.0, .5, 1.7);
+        glScalef(8.0, 1.0, .6);
+        glutSolidCube(1);
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(-2.0, 2.5, 1.7);
+        glScalef (4.0, 3.0, .6);
+        glutSolidCube(1);
+
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef (-1.0, .5,-1.7) ;
+        glScalef(8.0, 1.0, .6);
+        glutSolidCube(1);
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(-2.0, 2.5, -1.7);
+        glScalef (4.0, 3.0, .6);
+        glutSolidCube(1);
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(3.88, 6.4, 0);
+        glutSolidSphere(.5, 3.6, 1.8);
+    glPopMatrix();
+    glPopMatrix();
 
 
 }
@@ -643,17 +786,95 @@ void drawCastle()
 
 }
 
+void drawScorpion()
+{
+	
+	// draw body
+	
+	glColor3f(1.00f, 0.00f, 1.0f);
+	
+	//body
+	glPushMatrix();
+		glScalef (10,3,5);
+		glRotatef(0,  0,  0,  1);
+		glutSolidCube(1);
+	glPopMatrix();
+	
+	glColor3f(1.00f, 0.00f, 0.0f);
+	
+	// upper leg
+	glPushMatrix();
+		glTranslatef(4, 0, 1);
+		//glRotatef(-20,  1,  0,  0);
+		glScalef (1,1,3);
+		glutSolidCube(1);
+	glPopMatrix();
+	
+	glPushMatrix();
+		glTranslatef(4, 0, -1);
+		//glRotatef(-20,  1,  0,  0);
+		glScalef (1,1,3);
+		glutSolidCube(1);
+	glPopMatrix();
 
+	glPushMatrix();
+		glTranslatef(-4, 0, -1);
+		//glRotatef(-20,  1,  0,  0);
+		glScalef (1,1,3);
+		glutSolidCube(1);
+	glPopMatrix();
+
+	glPushMatrix();
+		glTranslatef(-4, 0, 1);
+		//glRotatef(-20,  1,  0,  0);
+		glScalef (1,1,3);
+		glutSolidCube(1);
+	glPopMatrix();
+		
+	// lower leg
+	glPushMatrix();
+		glTranslatef(4, -0.8, 5.3);
+		glRotatef(50,  1,  0,  0);
+		glScalef (1,1,3);
+
+		glutSolidCube(1);
+	glPopMatrix();
+
+}
+
+void cannonAnimation(int time)
+{
+
+    glutPostRedisplay();
+    
+    cannonBallZ += cos(30*(3.1415/180)) * 1.5 -  (  cos(30*(3.1415/180)) * 1.5 * 0.1);
+    cannonBallY += (sin(30*(3.1415/180)) * 1.5) - (9.81 * 0.5 * pow(time*0.001,2));
+    time += 10;
+    if (cannonBallY > 0)
+    {
+    glutTimerFunc(1,cannonAnimation,time);
+	}
+	
+
+}
 
 //---------------------------------------------------------------------
 void initialise(void)
 {
     loadGLTextures();
+	loadMeshFile("Cannon.off");             //Specify mesh file name here
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_NORMALIZE);
     glClearColor (0.0, 0.0, 0.0, 0.0);
+    
+    glEnable(GL_LIGHTING);                  //Enable OpenGL states
+    glEnable(GL_LIGHT0);
+    glEnable(GL_COLOR_MATERIAL);
+    glEnable(GL_DEPTH_TEST);
+    glEnable(GL_NORMALIZE);
+
 
     glMatrixMode (GL_PROJECTION);
     glLoadIdentity ();
@@ -695,6 +916,17 @@ void display(void)
 
     glPopMatrix();
     // no marks for code?
+    
+    glPushMatrix();
+        glTranslatef(00, 490, 200);
+		drawScorpion();
+    glPopMatrix();
+    
+    glPushMatrix();
+        glTranslatef(-5, 490, 40);
+        glScalef (1.5,1.5,1.5);
+		drawCannon();
+    glPopMatrix();
 
 
     //
@@ -712,6 +944,18 @@ void display(void)
 
     glutSwapBuffers();
 }
+
+void keyBoard (unsigned char key, int x, int y)
+{
+	if (key == 'c')
+	{
+		cannonBallY	= 4;
+		cannonBallZ  = 68;
+		glutTimerFunc(1,cannonAnimation,0);
+	   
+	}
+}  
+
 
 //--------------------------------------------------------------
  void special(int key, int x, int y)
