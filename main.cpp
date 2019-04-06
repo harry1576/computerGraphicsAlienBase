@@ -16,10 +16,7 @@
 #include <climits>
 #include <math.h>
 
-#include <iomanip>
-#include <string>
-#include <map>
-#include <random>
+
 
 
 using namespace std;
@@ -969,33 +966,61 @@ void display(void)
 
     //
 
+
+	//int xpoint = 0;
+	//int ypoint = 0;
+	//int zpoint = 0;
+
+	//// Y = { 1/[ σ * sqrt(2π) ] } * e-(x - μ)2/2σ2
+	////where X is a normal random variable, μ is the mean, σ is the standard deviation, π is approximately 3.14159, and e is approximately 2.71828.
+	////int y = (1/(5*sqrt(2*3.141592)))*(2.74^(x-0)
+	
+	//glDisable(GL_LIGHTING);                  
+
+	//std::random_device rd{};
+    //std::mt19937 gen{rd()};
+	//std::normal_distribution<> d{0,2};
+	//std::map<int, int> hist{};
+    //for(int n=0; n<100; ++n) {
+        //++hist[std::round(d(gen))];
+    //}
+    //for(auto p : hist) {
+		//glBegin(GL_POINTS);
+		
+		//int colourPicker = rand() % 5;
+		//if (colourPicker == 0){glColor3f(0.95f, 1.00f, 0.06f);}
+		//else if (colourPicker ==1){glColor3f(0.95f, 0.69f, 0.25f);}
+		//else if (colourPicker ==2){glColor3f(0.89, 0.72, 0.13);}
+		//else if (colourPicker ==3){glColor3f(0.89f, 0.47f, 0.13);}
+		//else if (colourPicker ==4){glColor3f(0.89f, 0.13f, 0.17f);}
+		
+		
+		//glVertex3f(p.first, 510 - (p.second/2),zpoint-40);
+		
+		//cout << "X " << p.first  << "Z " <<  p.second/200 << endl;
+
+       //glEnd();
+    //}
+    //glEnable(GL_LIGHTING);                  //Enable OpenGL states
+
+    
 	if (rocketThrust > 0)
 	{
-	int xpoint = 0;
-	int ypoint = 0;
-	int zpoint = 0;
-
-	// Y = { 1/[ σ * sqrt(2π) ] } * e-(x - μ)2/2σ2
-	//where X is a normal random variable, μ is the mean, σ is the standard deviation, π is approximately 3.14159, and e is approximately 2.71828.
-	//int y = (1/(5*sqrt(2*3.141592)))*(2.74^(x-0)
-	
-	std::random_device rd{};
-    std::mt19937 gen{rd()};
-	std::normal_distribution<> d{0,3};
-	std::map<int, int> hist{};
-    for(int n=0; n<100; ++n) {
-        ++hist[std::round(d(gen))];
-    }
-	
 	glDisable(GL_LIGHTING);                  
     glPointSize(4.5);
-    for(int x = 0; x < rocketThrust; x++)
-    {
-		xpoint = rand() % 10 - 4;
-		ypoint = rand() % 10 - 4;
-		zpoint = rand() % 10 - 4;
+    
+    for(int x = 0; x < 100; x++)
+    {	
+
+		int xpoint = rand() % 20 - 10;
+		int ypoint = rand() % 100 - 10;
+		int zpoint = rand() % 100 - 50;
+		
+		
 		
 		int colourPicker = rand() % 5;
+
+		
 		//cout << "Colour " << colourPicker  << endl;
 		glBegin(GL_POINTS);
 
@@ -1006,19 +1031,20 @@ void display(void)
 		else if (colourPicker ==4){glColor3f(0.89f, 0.13f, 0.17f);}
 		
 		
-			glVertex3f(xpoint, 504+ ypoint,zpoint-40);
+		
+		if (((abs(xpoint) * abs(xpoint)) + (abs(xpoint) * abs(xpoint))) < zpoint)
+		{
+			glVertex3f(-15 + xpoint, 520 + ypoint,-40 + zpoint);
+		}
+
+
 		glEnd();
 	}	
-}
-
- 
+	
+	}
     glEnable(GL_LIGHTING);                  //Enable OpenGL states
-
-
     //glEnable(GL_TEXTURE_2D);
     //glBindTexture(GL_TEXTURE_2D, texId[6]);
-
-
     glutSwapBuffers();
 }
 
@@ -1029,13 +1055,10 @@ void keyBoard (unsigned char key, int x, int y)
 		cannonBallY	= 4;
 		cannonBallZ  = 68;
 		glutTimerFunc(1,cannonAnimation,0);
-	   
 	}
 	if (key == 's' && rocketThrust == 0)
 	{
-
-		glutTimerFunc(1,RocketFeetAnimation,0);
-	   
+		glutTimerFunc(1,RocketFeetAnimation,0);	   
 	}
 }  
 
