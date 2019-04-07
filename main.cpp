@@ -37,6 +37,12 @@ int rocketFeetAngle = 0;
 int rocketThrust = 0;
 float rocketHeight = 530;
 
+float robot1X = 0;
+float robot1Z = 130;
+float robot1AngleX = 0;
+float robot1AngleZ = 0;
+float robot1AngleY = 0;
+
 float *x, *y, *z;  //vertex coordinate arrays
 int *t1, *t2, *t3; //triangles
 int nvrt, ntri;    //total number of vertices and triangles
@@ -875,6 +881,8 @@ void drawRobot1()
 	
 	
 	glEnable(GL_LIGHTING);
+	glPushMatrix();
+	glRotatef(robot1AngleY,0,1,0);
 
     glPushMatrix();
 		glTranslatef(0.6, 5.5, 1.4);
@@ -886,19 +894,84 @@ void drawRobot1()
 		glutSolidSphere(0.3, 50, 50 );
 	glPopMatrix();
 	
+	glPushMatrix();
+		glTranslatef(0, 6, 0);
+		glScalef(0.2,5,0.2);
+		glutSolidCube(1);
+	glPopMatrix();
+	glPopMatrix();
+	
+	
+	
 	glEnable(GL_TEXTURE_2D);
 	glBindTexture(GL_TEXTURE_2D, texId[8]);
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 	glPushMatrix();
+		glRotatef(robot1AngleZ,0,0,1);
+		glRotatef(robot1AngleX,1,0,0);
 		gluSphere ( q, 4.0, 50, 50 );
-		glTranslatef(0, 5.4, 0);
-		glutSolidCube(3);
-
 	glPopMatrix();
+	glPushMatrix();	
+		glTranslatef(0, 5.4, 0);
+				glRotatef(robot1AngleY,0,0,1);
+		glutSolidCube(3);
+	glPopMatrix();
+	
+
     glDisable(GL_TEXTURE_2D);
 
 	
 }
+
+
+void robot1Animation(int time)
+{	
+	glutPostRedisplay();
+	int r = 4;
+	int angleStep = 8;
+	
+	if (robot1Z == 130 && robot1X < 130)
+	{
+		robot1X += (r * 2 * M_PI)/(360/angleStep); 
+		robot1AngleX = 0;
+		robot1AngleZ -= angleStep;
+		robot1AngleY = 90;
+
+	}
+	else if (robot1X >= 130 && robot1Z > -130)
+	{
+		robot1Z -= (r * 2 * M_PI)/(360/angleStep);
+		robot1AngleZ = 0; 
+		robot1AngleX -= angleStep;
+		robot1AngleY = 180;
+
+	}
+	else if (robot1Z <= -130 && robot1X > -130)
+	{
+		robot1X -= (r * 2 * M_PI)/(360/angleStep);
+		robot1AngleX = 0; 
+		robot1AngleZ += angleStep;
+		robot1AngleY = 270;
+
+	}
+	else if (robot1X <= -130 && robot1Z < 130)
+	{
+		robot1Z += (r * 2 * M_PI)/(360/angleStep);
+		robot1AngleX += angleStep; 
+		robot1AngleZ = 0;
+		robot1AngleY = 0;
+
+	}
+	
+	
+	//robot1Z += (r * 2 * M_PI)/(360/angleStep) ;
+	//robot1AngleX += angleStep;
+	
+	
+	glutTimerFunc(30,robot1Animation,time);
+
+}
+
 
 void cannonAnimation(int time)
 {
@@ -1037,13 +1110,13 @@ void display(void)
     glPopMatrix();
     
     glPushMatrix();
-        glTranslatef(-5, 490, 40);
+        glTranslatef(-5, 490, 60);
         glScalef (1.5,1.5,1.5);
 		drawCannon();
     glPopMatrix();
     
     glPushMatrix();
-        glTranslatef(0, 494.5, 150);
+        glTranslatef(robot1X, 494.5, robot1Z);
 		drawRobot1();
 	glPopMatrix();
 
@@ -1176,6 +1249,8 @@ int main(int argc, char** argv)
    glutDisplayFunc(display);
    glutSpecialFunc(special);
    glutKeyboardFunc(keyBoard);
+   glutTimerFunc(1,robot1Animation,0);	   
+
    glutMainLoop();
    return 0;
 }
