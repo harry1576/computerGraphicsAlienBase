@@ -40,10 +40,12 @@ float rocketHeight = 530;
 float *x, *y, *z;  //vertex coordinate arrays
 int *t1, *t2, *t3; //triangles
 int nvrt, ntri;    //total number of vertices and triangles
+GLUquadricObj*  q;
 
 
 
-GLuint texId[7];
+
+GLuint texId[8];
 
 
 //-- Loads mesh data in OFF format    -------------------------------------
@@ -154,6 +156,13 @@ void loadGLTextures()               // Load bitmaps And Convert To Textures
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
+    
+    glBindTexture(GL_TEXTURE_2D, texId[8]);  //Use this texture name for the following OpenGL texture
+    loadTGA("rust.tga");
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+    
+    
 
 
 }
@@ -370,13 +379,13 @@ void skybox(){
   glColor3f(0, 1, 1);
   glBegin(GL_QUADS);
   glTexCoord2f(1.0, 1.0);
-  glVertex3f(-1000, 0., 1000);
+  glVertex3f(-1000, 486, 1000);
   glTexCoord2f(1.0, 0.0);
-  glVertex3f(1000, 0.,  1000);
+  glVertex3f(1000, 486,  1000);
   glTexCoord2f(0.0, 0.0);
-  glVertex3f(1000, 0., -1000);
+  glVertex3f(1000, 486, -1000);
   glTexCoord2f(0.0, 1.0);
-  glVertex3f(-1000, 0., -1000);
+  glVertex3f(-1000, 486, -1000);
   glEnd();
 
 
@@ -446,11 +455,11 @@ void drawCannon()
 void drawCastle()
 {
 	
-    GLfloat lightpos[] = {0.6, 1, 1,0 };
-    
-    
+    GLfloat lightpos[] = {800,800 ,800,0 };
+
     
     glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
+ 
     
     int cubeSize = 2;
         
@@ -863,13 +872,31 @@ void drawScorpion()
 
 void drawRobot1()
 {
+	
+	
+	glEnable(GL_LIGHTING);
 
+    glPushMatrix();
+		glTranslatef(0.6, 5.5, 1.4);
+		glutSolidSphere(0.3, 50, 50 );
+	glPopMatrix();
+	
 	glPushMatrix();
-		glutSolidSphere(4,50,50);
+		glTranslatef(-0.6, 5.5, 1.4);
+		glutSolidSphere(0.3, 50, 50 );
+	glPopMatrix();
+	
+	glEnable(GL_TEXTURE_2D);
+	glBindTexture(GL_TEXTURE_2D, texId[8]);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+	glPushMatrix();
+		gluSphere ( q, 4.0, 50, 50 );
 		glTranslatef(0, 5.4, 0);
 		glutSolidCube(3);
 
 	glPopMatrix();
+    glDisable(GL_TEXTURE_2D);
+
 	
 }
 
@@ -931,7 +958,9 @@ void initialise(void)
 {
     loadGLTextures();
 	loadMeshFile("Cannon.off");             //Specify mesh file name here
-
+	
+    float white[4]  = {1.0, 1.0, 1.0, 1.0};
+	
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_NORMALIZE);
@@ -944,6 +973,19 @@ void initialise(void)
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_NORMALIZE);
     
+
+    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
+    
+    
+    glMaterialfv(GL_FRONT, GL_SPECULAR, white);
+    glMaterialf(GL_FRONT, GL_SHININESS, 50);
+    
+    q =  gluNewQuadric ( );
+    gluQuadricDrawStyle (q, GLU_FILL );
+    gluQuadricNormals   (q, GLU_SMOOTH );
+    
+
+    gluQuadricTexture (q, GL_TRUE);
 
 
     glMatrixMode (GL_PROJECTION);
@@ -965,8 +1007,10 @@ void display(void)
 
     //gluLookAt (eye_x, 500, eye_z, xlook, 500, zlook, 0, 1, 0);  //camera rotation
 
+    
     glColor3f(1, 0, 1);
-
+   
+   
 
 
     glPushMatrix();
