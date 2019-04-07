@@ -928,7 +928,7 @@ void robot1Animation(int time)
 {	
 	glutPostRedisplay();
 	int r = 4;
-	int angleStep = 8;
+	int angleStep = 10;
 	
 	if (robot1Z == 130 && robot1X < 130)
 	{
@@ -968,7 +968,7 @@ void robot1Animation(int time)
 	//robot1AngleX += angleStep;
 	
 	
-	glutTimerFunc(30,robot1Animation,time);
+	glutTimerFunc(25,robot1Animation,time);
 
 }
 
@@ -1231,7 +1231,7 @@ void keyBoard (unsigned char key, int x, int y)
     glTranslatef((cos(angle*(3.14/180))* distance_from_origin),0,-(sin(angle*(3.14/180))* distance_from_origin));
 
 
-    cout << "X " << player_x  << "Z " << player_z << "Angle " << angle << endl;
+    //cout << "X " << player_x  << "Z " << player_z << "Angle " << angle << endl;
     glutPostRedisplay();
 
 }
