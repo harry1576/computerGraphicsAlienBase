@@ -18,7 +18,6 @@
 
 
 
-
 using namespace std;
 
 #define GL_CLAMP_TO_EDGE 0x812F   //To get rid of seams between textures
@@ -36,6 +35,7 @@ double cannonBallZ  = 68;
 int cannonFiring = 0;
 int rocketFeetAngle = 0;
 int rocketThrust = 0;
+float rocketHeight = 530;
 
 float *x, *y, *z;  //vertex coordinate arrays
 int *t1, *t2, *t3; //triangles
@@ -45,12 +45,6 @@ int nvrt, ntri;    //total number of vertices and triangles
 
 GLuint texId[7];
 
-void stars(GLfloat x, GLfloat y, GLfloat z){
-   glBegin(GL_POINTS);
-   glColor3f(1.0, 0.0, 0.0);
-   glVertex3f(x, y, z);
-   glEnd();
-}
 
 //-- Loads mesh data in OFF format    -------------------------------------
 void loadMeshFile(const char* fname)
@@ -146,7 +140,7 @@ void loadGLTextures()               // Load bitmaps And Convert To Textures
 
 
     glBindTexture(GL_TEXTURE_2D, texId[6]);
-    loadTGA("wall2.tga");
+    loadTGA("down4.tga");// was wall2.tga
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
@@ -452,8 +446,12 @@ void drawCannon()
 void drawCastle()
 {
 	
-    GLfloat lightpos[] = {.5, 1., 1., 0.};
+    GLfloat lightpos[] = {0.6, 1, 1,0 };
+    
+    
+    
     glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
+    
     int cubeSize = 2;
         
     glBindTexture(GL_TEXTURE_2D, texId[6]);
@@ -610,24 +608,24 @@ void drawCastle()
     glVertex3f(5,0, 54);
     glVertex3f(5,8, 54);
     glVertex3f(5,8, 56);
+	
+    glDisable(GL_TEXTURE_2D);
 
 	glEnd();
 
-	glDisable(GL_TEXTURE_2D);
-	
-	glColor3f(0.90f, 0.00f, 0.0f);
+	 glDisable(GL_TEXTURE_2D);
 
-	
+	glDisable(GL_LIGHTING);                
+
 	glPushMatrix();
 	   
+		glColor3f(0.9f, 0.00f, 0.0f);
 
 		glBegin(GL_QUADS);
-		
 		glVertex3f(-5,12, 56.01);
 		glVertex3f(5,12, 56.01);
 		glVertex3f(5,35, 56.01);
 		glVertex3f(-5,35, 56.01);
-		
 		glEnd();
 	glPopMatrix();
 	
@@ -639,27 +637,31 @@ void drawCastle()
 		glVertex3f(5,12, 56.01);
 		glEnd();
 	glPopMatrix();
-	
+	    glDisable(GL_TEXTURE_2D);
+
 	
 		
-	glPushMatrix();
-		glBegin(GL_QUADS);
-		glVertex3f(-5,12, 53.99);
-		glVertex3f(5,12,  53.99);
-		glVertex3f(5,35,  53.99);
-		glVertex3f(-5,35,  53.99);
-		glEnd();
-	glPopMatrix();
+	//glPushMatrix();
+		//glBegin(GL_QUADS);
+		//glVertex3f(-5,12, 53.99);
+		//glVertex3f(5,12,  53.99);
+		//glVertex3f(5,35,  53.99);
+		//glVertex3f(-5,35,  53.99);
+		//glEnd();
+	//glPopMatrix();
 	
-	glPushMatrix();
-		glBegin(GL_TRIANGLES);
-		glVertex3f(-5,12,  53.99);
-		glVertex3f(0,8,  53.99);
-		glVertex3f(5,12,  53.99);
-		glEnd();
-	glPopMatrix();
+	//glPushMatrix();
+		//glBegin(GL_TRIANGLES);
+		//glVertex3f(-5,12,  53.99);
+		//glVertex3f(0,8,  53.99);
+		//glVertex3f(5,12,  53.99);
+		//glEnd();
+	//glPopMatrix();
 	
-	
+		glDisable(GL_LIGHTING);                
+
+	glEnable(GL_LIGHTING);                
+
 	glPushMatrix();
 	glBindTexture(GL_TEXTURE_2D, texId[7]);
 		glEnable(GL_TEXTURE_2D);
@@ -678,22 +680,22 @@ void drawCastle()
 	glPopMatrix();
 	
 	
-	glPushMatrix();
-	glBindTexture(GL_TEXTURE_2D, texId[7]);
-		glEnable(GL_TEXTURE_2D);
-		glBegin(GL_QUADS);
+	//glPushMatrix();
+	//glBindTexture(GL_TEXTURE_2D, texId[7]);
+		//glEnable(GL_TEXTURE_2D);
+		//glBegin(GL_QUADS);
 		
-		glTexCoord2f(1, 1); 
-		glVertex3f(-3,17.5, 53.98);
-		glTexCoord2f(0., 1.0); 
-		glVertex3f(3,17.5, 53.98);
-		glTexCoord2f(0., 0.); 
-		glVertex3f(3,30, 53.98);
-		glTexCoord2f(1, 0.0); 
-		glVertex3f(-3,30, 53.98);
+		//glTexCoord2f(1, 1); 
+		//glVertex3f(-3,17.5, 53.98);
+		//glTexCoord2f(0., 1.0); 
+		//glVertex3f(3,17.5, 53.98);
+		//glTexCoord2f(0., 0.); 
+		//glVertex3f(3,30, 53.98);
+		//glTexCoord2f(1, 0.0); 
+		//glVertex3f(-3,30, 53.98);
 		
-		glEnd();
-	glPopMatrix();
+		//glEnd();
+	//glPopMatrix();
 
 	
 	glDisable(GL_TEXTURE_2D);
@@ -858,6 +860,19 @@ void drawScorpion()
 
 }
 
+
+void drawRobot1()
+{
+
+	glPushMatrix();
+		glutSolidSphere(4,50,50);
+		glTranslatef(0, 5.4, 0);
+		glutSolidCube(3);
+
+	glPopMatrix();
+	
+}
+
 void cannonAnimation(int time)
 {
     glutPostRedisplay();
@@ -877,20 +892,38 @@ void cannonAnimation(int time)
 
 void RocketFeetAnimation(int time)
 {
-	rocketThrust ++;
-    glutPostRedisplay();
+	glutPostRedisplay();
+
+	//cout << "Thrust :  " << rocketThrust << endl;
+	if (rocketThrust < 100)
+	{
+		rocketThrust ++;
+		glutTimerFunc(30,RocketFeetAnimation,0);
+
+	}
+    else
+    {
+	if (rocketThrust < 400)
+    {rocketThrust ++;
+		rocketHeight += 0.2;}
+	if (rocketThrust >= 400 && rocketHeight < 980)
+    {rocketThrust ++;
+		rocketHeight += 1;}
+	
+    
 	if (rocketFeetAngle < 70)
 	{
 			rocketFeetAngle += 3;
-			glutTimerFunc(35,RocketFeetAnimation,0);
+			glutTimerFunc(30,RocketFeetAnimation,0);
 	}
 	else
 	{
-		rocketRotation += 5;
-		glutTimerFunc(30,RocketFeetAnimation,0);
+		rocketRotation += 1;
+		glutTimerFunc(15,RocketFeetAnimation,0);
 	
 	}
-	
+	}
+
 }
 
 //---------------------------------------------------------------------
@@ -906,9 +939,11 @@ void initialise(void)
     
     glEnable(GL_LIGHTING);                  //Enable OpenGL states
     glEnable(GL_LIGHT0);
+    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
     glEnable(GL_COLOR_MATERIAL);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_NORMALIZE);
+    
 
 
     glMatrixMode (GL_PROJECTION);
@@ -944,7 +979,7 @@ void display(void)
 
     glPushMatrix();
 
-        glTranslatef(0, 530, -40);
+        glTranslatef(0, rocketHeight, -40);
         glScalef (1,1,1);
         drawRocket();
 		glColor3f(1.00f, 1.00f, 0.00f);
@@ -962,54 +997,20 @@ void display(void)
         glScalef (1.5,1.5,1.5);
 		drawCannon();
     glPopMatrix();
+    
+    glPushMatrix();
+        glTranslatef(0, 494.5, 150);
+		drawRobot1();
+	glPopMatrix();
 
-
-    //
-
-
-	//int xpoint = 0;
-	//int ypoint = 0;
-	//int zpoint = 0;
-
-	//// Y = { 1/[ σ * sqrt(2π) ] } * e-(x - μ)2/2σ2
-	////where X is a normal random variable, μ is the mean, σ is the standard deviation, π is approximately 3.14159, and e is approximately 2.71828.
-	////int y = (1/(5*sqrt(2*3.141592)))*(2.74^(x-0)
 	
-	//glDisable(GL_LIGHTING);                  
-
-	//std::random_device rd{};
-    //std::mt19937 gen{rd()};
-	//std::normal_distribution<> d{0,2};
-	//std::map<int, int> hist{};
-    //for(int n=0; n<100; ++n) {
-        //++hist[std::round(d(gen))];
-    //}
-    //for(auto p : hist) {
-		//glBegin(GL_POINTS);
-		
-		//int colourPicker = rand() % 5;
-		//if (colourPicker == 0){glColor3f(0.95f, 1.00f, 0.06f);}
-		//else if (colourPicker ==1){glColor3f(0.95f, 0.69f, 0.25f);}
-		//else if (colourPicker ==2){glColor3f(0.89, 0.72, 0.13);}
-		//else if (colourPicker ==3){glColor3f(0.89f, 0.47f, 0.13);}
-		//else if (colourPicker ==4){glColor3f(0.89f, 0.13f, 0.17f);}
-		
-		
-		//glVertex3f(p.first, 510 - (p.second/2),zpoint-40);
-		
-		//cout << "X " << p.first  << "Z " <<  p.second/200 << endl;
-
-       //glEnd();
-    //}
-    //glEnable(GL_LIGHTING);                  //Enable OpenGL states
-
     
 	if (rocketThrust > 0)
 	{
 	glDisable(GL_LIGHTING);                  
     glPointSize(6.6);
     
-    for(int x = 0; x < 250; x++)
+    for(int x = 0; x < rocketThrust; x++)
     {	
 		
 		
@@ -1023,7 +1024,7 @@ void display(void)
 		double length = sqrt(ypoint) * (rand() % 1000 + 1) * 0.001;
 		
 		
-		cout << "y " << ypoint << endl;
+		//cout << "y " << ypoint << endl;
 
 		
 		int theta = rand() % 360;
@@ -1048,15 +1049,15 @@ void display(void)
 
 		
 		
-	    glVertex3d(xpoint, 495 + ypoint,zpoint-40);
+	    glVertex3d(xpoint, (rocketHeight - 35) + ypoint,zpoint-40);
 	    
 	    
 
 		glEnd();
 	}	
-	
+	glEnable(GL_LIGHTING);                
+
 	}
-    glEnable(GL_LIGHTING);                  //Enable OpenGL states
     //glEnable(GL_TEXTURE_2D);
     //glBindTexture(GL_TEXTURE_2D, texId[6]);
     glutSwapBuffers();
@@ -1113,7 +1114,7 @@ void keyBoard (unsigned char key, int x, int y)
     glTranslatef((cos(angle*(3.14/180))* distance_from_origin),0,-(sin(angle*(3.14/180))* distance_from_origin));
 
 
-    //cout << "X " << player_x  << "Z " << player_z << "Angle " << angle << endl;
+    cout << "X " << player_x  << "Z " << player_z << "Angle " << angle << endl;
     glutPostRedisplay();
 
 }
