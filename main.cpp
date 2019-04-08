@@ -106,14 +106,14 @@ void floor()
     glMaterialfv(GL_FRONT, GL_SPECULAR, black);
     //The floor is made up of several tiny squares on a 200x200 grid. Each square has a unit size.
     glBegin(GL_QUADS);
-    for(int i = -1000; i < 1000; i+=2)
+    for(int i = -1000; i < 1000; i+=100)
     {
-        for(int j = -1000;  j < 1000; j+=2)
+        for(int j = -1000;  j < 1000; j+=100)
         {
             glVertex3f(i, 485, j);
-            glVertex3f(i, 485, j+2);
-            glVertex3f(i+2, 485, j+2);
-            glVertex3f(i+2, 485, j);
+            glVertex3f(i, 485, j+100);
+            glVertex3f(i+100, 485, j+100);
+            glVertex3f(i+100, 485, j);
         }
     }
     glMaterialfv(GL_FRONT, GL_SPECULAR, white);
@@ -951,6 +951,142 @@ void drawRobot1()
 }
 
 
+void drawRobot2()
+{		
+		//glRotatef(270,0,1,0);
+		
+		glPushMatrix();
+			glTranslatef(5.2,5,-2.5);
+			//glRotatef(0,0,1,0);
+			//glTranslatef(5.2,0,0);
+		
+			
+			glRotatef(90,1,0,0);
+			glutSolidTorus(0.4,0.7,20,20);
+		glPopMatrix();
+	
+	
+		glPushMatrix();
+			glTranslatef(-2.5,5,-2.5);
+		glPushMatrix();
+			glRotatef(0,0,0,1);
+			glTranslatef(4,0,0);
+			glScalef (8,0.5,0.5);
+			glutSolidCube(1);
+		glPopMatrix();
+		glPopMatrix();
+
+	
+		glPushMatrix();
+			glTranslatef(-2.5,5,-2.5);
+			glScalef (0.5,0.5,0.5);
+			glutSolidSphere(1.5,20,20);
+		glPopMatrix();
+		
+		glPushMatrix();
+			glTranslatef(-2.5,2.5,-2.5);
+			glScalef (0.5,5,0.5);
+			glutSolidCube(1);
+		glPopMatrix();
+	
+		glPushMatrix();
+			glTranslatef(-2.5,0,-2.5);
+			glScalef (8,1,3.5);
+			glutSolidCube(1);
+		glPopMatrix();
+		
+		
+		glPushMatrix();
+		glTranslatef(-5,0,0);
+		glPushMatrix();
+			glScalef (0.3,0.3,5);
+			glTranslatef(0,0,-0.5);
+			glutSolidCube(1);
+		glPopMatrix();
+		glPushMatrix();
+			glTranslatef(0,0,-5);
+			glPushMatrix();
+				glutSolidSphere(0.3,50,50);
+			glPopMatrix();
+
+			glPushMatrix();
+				glScalef (3,0.1,0.1);
+				glutSolidCube(1);
+			glPopMatrix();
+			
+			glPushMatrix();
+				glScalef (0.1,3,0.1);
+				glutSolidCube(1);
+			glPopMatrix();
+			
+			glutSolidTorus(0.375,1.5,20,20);
+		glPopMatrix();
+		
+		
+		glPushMatrix();
+			glPushMatrix();
+				glutSolidSphere(0.3,50,50);
+			glPopMatrix();
+
+			glPushMatrix();
+				glScalef (3,0.1,0.1);
+				glutSolidCube(1);
+			glPopMatrix();
+			
+			glPushMatrix();
+				glScalef (0.1,3,0.1);
+				glutSolidCube(1);
+			glPopMatrix();
+			
+			glutSolidTorus(0.375,1.5,20,20);
+		glPopMatrix();
+	glPopMatrix();
+	
+	glPushMatrix();
+		glPushMatrix();
+			glScalef (0.3,0.3,5);
+			glTranslatef(0,0,-0.5);
+			glutSolidCube(1);
+		glPopMatrix();
+		glPushMatrix();
+			glTranslatef(0,0,-5);
+			glPushMatrix();
+				glutSolidSphere(0.3,50,50);
+			glPopMatrix();
+
+			glPushMatrix();
+				glScalef (3,0.1,0.1);
+				glutSolidCube(1);
+			glPopMatrix();
+			
+			glPushMatrix();
+				glScalef (0.1,3,0.1);
+				glutSolidCube(1);
+			glPopMatrix();
+			
+			glutSolidTorus(0.375,1.5,20,20);
+		glPopMatrix();
+		glPushMatrix();
+			glPushMatrix();
+				glutSolidSphere(0.3,50,50);
+			glPopMatrix();
+
+			glPushMatrix();
+				glScalef (3,0.1,0.1);
+				glutSolidCube(1);
+			glPopMatrix();
+			
+			glPushMatrix();
+				glScalef (0.1,3,0.1);
+				glutSolidCube(1);
+			glPopMatrix();
+			
+			glutSolidTorus(0.375,1.5,20,20);
+		glPopMatrix();
+	glPopMatrix();
+}
+
+
 void robot1Animation(int time)
 {	
 	glutPostRedisplay();
@@ -1157,6 +1293,13 @@ void display(void)
         glScalef (1.5,1.5,1.5);
 		drawCannon();
     glPopMatrix();
+    
+    
+    glPushMatrix();
+        glTranslatef(0, 494.5, 200);
+		drawRobot2();
+	glPopMatrix();
+
     
     glPushMatrix();
         glTranslatef(robot1X, 494.5, robot1Z);
