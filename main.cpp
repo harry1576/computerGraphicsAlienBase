@@ -48,6 +48,13 @@ int *t1, *t2, *t3; //triangles
 int nvrt, ntri;    //total number of vertices and triangles
 GLUquadricObj*  q;
 
+int robot2activate = 0;
+float robot2z = 290;
+float robot2x = -17.765;
+
+
+
+
 
 
 
@@ -106,14 +113,14 @@ void floor()
     glMaterialfv(GL_FRONT, GL_SPECULAR, black);
     //The floor is made up of several tiny squares on a 200x200 grid. Each square has a unit size.
     glBegin(GL_QUADS);
-    for(int i = -1000; i < 1000; i+=100)
+    for(int i = -1000; i < 1000; i+=2)
     {
-        for(int j = -1000;  j < 1000; j+=100)
+        for(int j = -1000;  j < 1000; j+=2)
         {
             glVertex3f(i, 485, j);
-            glVertex3f(i, 485, j+100);
-            glVertex3f(i+100, 485, j+100);
-            glVertex3f(i+100, 485, j);
+            glVertex3f(i, 485, j+2);
+            glVertex3f(i+2, 485, j+2);
+            glVertex3f(i+2, 485, j);
         }
     }
     glMaterialfv(GL_FRONT, GL_SPECULAR, white);
@@ -951,51 +958,74 @@ void drawRobot1()
 }
 
 
-void drawRobot2()
-{		
-		//glRotatef(270,0,1,0);
-		
+
+void drawArm()
+{
+
 		glPushMatrix();
-			glTranslatef(5.2,5,-2.5);
-			//glRotatef(0,0,1,0);
-			//glTranslatef(5.2,0,0);
-		
-			
+			glTranslatef(-8.40,0,0);
 			glRotatef(90,1,0,0);
 			glutSolidTorus(0.4,0.7,20,20);
+		
 		glPopMatrix();
 	
-	
 		glPushMatrix();
-			glTranslatef(-2.5,5,-2.5);
-		glPushMatrix();
-			glRotatef(0,0,0,1);
-			glTranslatef(4,0,0);
+			glTranslatef(-4,0,0);
+
 			glScalef (8,0.5,0.5);
 			glutSolidCube(1);
 		glPopMatrix();
+
+
+}
+
+void drawRobot2()
+{		
+		//glRotatef(270,0,1,0);
+		glPushMatrix();
+			glTranslatef(-2.5,3,-2.50);
+			glRotatef(25,0,0,1);
+		drawArm();
+
 		glPopMatrix();
 
 	
 		glPushMatrix();
-			glTranslatef(-2.5,5,-2.5);
+			glColor3f(0.98f, 0.96f, 0.27f);
+
+			glTranslatef(-5.5,1,-3.8);
+			glScalef (2,1,1);
+			glutSolidCube(1);
+			glColor3f(1.0f, 0.0f, 0.0f);
+
+		glPopMatrix();
+	
+	
+		glPushMatrix();
+			glTranslatef(-2.5,3,-2.5);
 			glScalef (0.5,0.5,0.5);
-			glutSolidSphere(1.5,20,20);
+			glutSolidSphere(2,20,20);
+			glColor3f(0.474,0.470,0.403);
 		glPopMatrix();
 		
 		glPushMatrix();
-			glTranslatef(-2.5,2.5,-2.5);
-			glScalef (0.5,5,0.5);
+			glColor3f(1.0f, 0.0f, 0.0f);
+
+			glTranslatef(-2.5,2,-2.5);
+			glScalef (0.5,3,0.5);
 			glutSolidCube(1);
 		glPopMatrix();
 	
 		glPushMatrix();
+			glColor3f(1.0f, 0.0f, 0.0f);
+
 			glTranslatef(-2.5,0,-2.5);
 			glScalef (8,1,3.5);
 			glutSolidCube(1);
 		glPopMatrix();
 		
-		
+		glColor3f(0.474,0.470,0.403);
+
 		glPushMatrix();
 		glTranslatef(-5,0,0);
 		glPushMatrix();
@@ -1018,8 +1048,8 @@ void drawRobot2()
 				glScalef (0.1,3,0.1);
 				glutSolidCube(1);
 			glPopMatrix();
-			
 			glutSolidTorus(0.375,1.5,20,20);
+	
 		glPopMatrix();
 		
 		
@@ -1040,6 +1070,8 @@ void drawRobot2()
 			
 			glutSolidTorus(0.375,1.5,20,20);
 		glPopMatrix();
+			glColor3f(0.474,0.470,0.403);
+
 	glPopMatrix();
 	
 	glPushMatrix();
@@ -1085,6 +1117,19 @@ void drawRobot2()
 		glPopMatrix();
 	glPopMatrix();
 }
+
+
+void robot2Animation(int time)
+{	
+	glutPostRedisplay();
+	if (robot2activate)
+	{ robot2z ++;		
+		}
+	
+	glutTimerFunc(25,robot2Animation,time);
+
+}
+
 
 
 void robot1Animation(int time)
@@ -1136,20 +1181,24 @@ void robot1Animation(int time)
 }
 
 
+
 void cannonAnimation(int time)
 {
     glutPostRedisplay();
     cannonFiring = 1;
     cannonBallZ += cos(30*(3.1415/180)) * 1.5 -  (  cos(30*(3.1415/180)) * 1.5 * 0.1) ;
     cannonBallY += (sin(30*(3.1415/180)) * 1.5) - (9.81 * 0.5 * pow(time*0.001,2));
+     
     time += 10;
-    if (cannonBallY > -1)
+    if (cannonBallY > -1 && robot2activate == 0)
     {
     glutTimerFunc(10,cannonAnimation,time);
 	}
 	else
 	{
 	    cannonFiring = 0;
+	    robot2activate = 1;
+
 	}
 }
 
@@ -1254,7 +1303,7 @@ void display(void)
 
     //gluLookAt (eye_x, 500, eye_z, xlook, 500, zlook, 0, 1, 0);  //camera rotation
 
-	float spot_pos[]={-100, 500, 0};
+	float spot_pos[]={robot2x, 520, robot2z};
     float SPOT_DIRECTION[] = {1.0, -1.0,0.0};
 
 
@@ -1296,7 +1345,8 @@ void display(void)
     
     
     glPushMatrix();
-        glTranslatef(0, 494.5, 200);
+        glTranslatef(robot2x, 491, robot2z);
+        glRotatef(90,0,1,0);
 		drawRobot2();
 	glPopMatrix();
 
@@ -1439,7 +1489,9 @@ int main(int argc, char** argv)
    glutDisplayFunc(display);
    glutSpecialFunc(special);
    glutKeyboardFunc(keyBoard);
-   glutTimerFunc(1,robot1Animation,0);	   
+   glutTimerFunc(1,robot1Animation,0);	
+   glutTimerFunc(1,robot2Animation,0);	   
+   
 
    glutMainLoop();
    return 0;
