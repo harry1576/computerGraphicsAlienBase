@@ -1244,7 +1244,7 @@ int main(int argc, char** argv)
    glutInitWindowSize (900, 720);
    glutInitWindowPosition (50, 50);
 
-   glutCreateWindow ("Sky Box");
+   glutCreateWindow ("hdo27 COSC363 Assignment 1");
    initialise();
    glutDisplayFunc(display);
    glutSpecialFunc(special);
