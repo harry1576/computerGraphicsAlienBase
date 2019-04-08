@@ -95,6 +95,32 @@ void loadMeshFile(const char* fname)
     cout << " File successfully read." << endl;
 }
 
+
+//-- Ground Plane --------------------------------------------------------
+void floor()
+{
+    float white[4] = {1., 1., 1., 1.};
+    float black[4] = {0};
+    glColor4f(0.78, 0.72, 0.56, 1.0);  //The floor is gray in colour
+    glNormal3f(0.0, 1.0, 0.0);
+    glMaterialfv(GL_FRONT, GL_SPECULAR, black);
+    //The floor is made up of several tiny squares on a 200x200 grid. Each square has a unit size.
+    glBegin(GL_QUADS);
+    for(int i = -1000; i < 1000; i+=2)
+    {
+        for(int j = -1000;  j < 1000; j+=2)
+        {
+            glVertex3f(i, 485, j);
+            glVertex3f(i, 485, j+2);
+            glVertex3f(i+2, 485, j+2);
+            glVertex3f(i+2, 485, j);
+        }
+    }
+    glMaterialfv(GL_FRONT, GL_SPECULAR, white);
+    glEnd();
+
+}
+
 void loadGLTextures()               // Load bitmaps And Convert To Textures
 {
     glGenTextures(8, texId);        // Create texture ids
@@ -381,18 +407,19 @@ void skybox(){
   glEnd();
 
   /////////////////////// FLOOR //////////////////////////
-  glBindTexture(GL_TEXTURE_2D, texId[5]);
-  glColor3f(0, 1, 1);
-  glBegin(GL_QUADS);
-  glTexCoord2f(1.0, 1.0);
-  glVertex3f(-1000, 486, 1000);
-  glTexCoord2f(1.0, 0.0);
-  glVertex3f(1000, 486,  1000);
-  glTexCoord2f(0.0, 0.0);
-  glVertex3f(1000, 486, -1000);
-  glTexCoord2f(0.0, 1.0);
-  glVertex3f(-1000, 486, -1000);
-  glEnd();
+    
+  //glBindTexture(GL_TEXTURE_2D, texId[5]);
+  //glColor3f(0, 1, 1);
+  //glBegin(GL_QUADS);
+  //glTexCoord2f(1.0, 1.0);
+  //glVertex3f(-1000, 486, 1000);
+  //glTexCoord2f(1.0, 0.0);
+  //glVertex3f(1000, 486,  1000);
+  //glTexCoord2f(0.0, 0.0);
+  //glVertex3f(1000, 486, -1000);
+  //glTexCoord2f(0.0, 1.0);
+  //glVertex3f(-1000, 486, -1000);
+  //glEnd();
 
 
   glDisable(GL_TEXTURE_2D);
@@ -1047,6 +1074,17 @@ void initialise(void)
     glEnable(GL_NORMALIZE);
     
 
+    float grey[4] = {0.2, 0.2, 0.2, 1.0};
+    glEnable(GL_LIGHT1);
+    glLightfv(GL_LIGHT1, GL_AMBIENT, grey);
+    glLightfv(GL_LIGHT1, GL_DIFFUSE, white);
+    glLightfv(GL_LIGHT1, GL_SPECULAR, white);
+    glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 30.0);
+    glLightf(GL_LIGHT1, GL_SPOT_EXPONENT,10.0);
+   
+
+
+
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
     
     
@@ -1080,11 +1118,16 @@ void display(void)
 
     //gluLookAt (eye_x, 500, eye_z, xlook, 500, zlook, 0, 1, 0);  //camera rotation
 
-    
-    glColor3f(1, 0, 1);
-   
-   
+	float spot_pos[]={-100, 500, 0};
+    float SPOT_DIRECTION[] = {1.0, -1.0,0.0};
 
+
+    glLightfv(GL_LIGHT1, GL_POSITION, spot_pos);   //light position
+    glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, SPOT_DIRECTION);
+
+
+    
+    
 
     glPushMatrix();
         glTranslatef(0, 490, 0);
@@ -1120,6 +1163,10 @@ void display(void)
 		drawRobot1();
 	glPopMatrix();
 
+	glPushMatrix();
+		floor();
+	glPopMatrix();
+	
 	
     
 	if (rocketThrust > 0)
