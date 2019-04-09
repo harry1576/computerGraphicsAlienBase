@@ -113,16 +113,24 @@ void floor()
     glMaterialfv(GL_FRONT, GL_SPECULAR, black);
     //The floor is made up of several tiny squares on a 200x200 grid. Each square has a unit size.
     glBegin(GL_QUADS);
-    for(int i = -1000; i < 1000; i+=2)
-    {
-        for(int j = -1000;  j < 1000; j+=2)
+    for(int i = -175; i < 175; i+=1)
+    {	
+        for(int j = -175;  j < 175; j+=1)
         {
-            glVertex3f(i, 485, j);
-            glVertex3f(i, 485, j+2);
-            glVertex3f(i+2, 485, j+2);
-            glVertex3f(i+2, 485, j);
+			if((i > 100 || i < -100) || (j  > 100 || j < -100)){
+            glVertex3f(i, 490, j);
+            glVertex3f(i, 490, j+1);
+            glVertex3f(i+1, 490, j+1);
+            glVertex3f(i+1, 490, j);}
+       
         }
     }
+    
+   glVertex3f(-1000, 484.9, -1000);
+   glVertex3f(-1000, 484.9, 1000);
+   glVertex3f(1000, 484.9, 1000);
+   glVertex3f(1000, 484.9, -1000);
+    
     glMaterialfv(GL_FRONT, GL_SPECULAR, white);
     glEnd();
 
@@ -1192,7 +1200,7 @@ void cannonAnimation(int time)
     time += 10;
     if (cannonBallY > -1 && robot2activate == 0)
     {
-    glutTimerFunc(10,cannonAnimation,time);
+    glutTimerFunc(9,cannonAnimation,time);
 	}
 	else
 	{
@@ -1244,7 +1252,7 @@ void initialise(void)
     loadGLTextures();
 	loadMeshFile("Cannon.off");             //Specify mesh file name here
 	
-    float white[4]  = {1.0, 1.0, 1.0, 1.0};
+    float white[4]  = {1.0, 0.0, 0.0, 1.0};
 	
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
@@ -1264,8 +1272,8 @@ void initialise(void)
     glLightfv(GL_LIGHT1, GL_AMBIENT, grey);
     glLightfv(GL_LIGHT1, GL_DIFFUSE, white);
     glLightfv(GL_LIGHT1, GL_SPECULAR, white);
-    glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 30.0);
-    glLightf(GL_LIGHT1, GL_SPOT_EXPONENT,10.0);
+    glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 80.0);
+    glLightf(GL_LIGHT1, GL_SPOT_EXPONENT,80.0);
    
 
 
@@ -1303,13 +1311,16 @@ void display(void)
 
     //gluLookAt (eye_x, 500, eye_z, xlook, 500, zlook, 0, 1, 0);  //camera rotation
 
-	float spot_pos[]={robot2x, 520, robot2z};
-    float SPOT_DIRECTION[] = {1.0, -1.0,0.0};
+	float spot_pos[]={0, 0, 0};
+    float SPOT_DIRECTION[] = {.6, -1.0,0.0};
 
 
-    glLightfv(GL_LIGHT1, GL_POSITION, spot_pos);   //light position
-    glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, SPOT_DIRECTION);
-
+	glPushMatrix();
+		glTranslatef(robot1X,520,robot1Z);
+		glRotatef(robot1AngleY - 90,0,1,0);
+		glLightfv(GL_LIGHT1, GL_POSITION, spot_pos);   //light position
+		glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, SPOT_DIRECTION);
+	glPopMatrix();
 
     
     
@@ -1345,7 +1356,7 @@ void display(void)
     
     
     glPushMatrix();
-        glTranslatef(robot2x, 491, robot2z);
+        glTranslatef(robot2x, 488, robot2z);
         glRotatef(90,0,1,0);
 		drawRobot2();
 	glPopMatrix();
