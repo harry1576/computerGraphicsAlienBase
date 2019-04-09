@@ -54,7 +54,8 @@ float robot2x = -17.765;
 int cameraMode = 1;
 int camerateRotate = 0 ;
 int lighton = 0;
-
+float screenWidth = 720;
+float screenHeight = 900;
 
 
 
@@ -1210,7 +1211,7 @@ void RocketFeetAnimation(int time)
 
 void light(int time)
 {
-    if(lighton && rocketThrust == 0)
+    if(lighton)
     {
         glDisable(GL_LIGHT2);
         lighton = 0;
@@ -1265,7 +1266,7 @@ void initialise(void)
     glLightfv(GL_LIGHT2, GL_AMBIENT, grey);
     glLightfv(GL_LIGHT2, GL_DIFFUSE, green);
     glLightfv(GL_LIGHT2, GL_SPECULAR, green);
-    glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 90.0);
+    glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 89.0);
     glLightf(GL_LIGHT2, GL_SPOT_EXPONENT,90.0);
 
 
@@ -1285,16 +1286,24 @@ void initialise(void)
     gluQuadricTexture (q, GL_TRUE);
 
 
-    glMatrixMode (GL_PROJECTION);
-    glLoadIdentity ();
-    //gluPerspective(50.0, 1, 100.0, 2000.0);   //Perspective projection
-    glFrustum(-4, 4, -4, 4, 6, 2000);  //The camera view volume
 
 }
 
 //---------------------------------------------------------------------
 void display(void)
 {
+    glMatrixMode (GL_PROJECTION);
+    glLoadIdentity ();
+    //gluPerspective(50.0, 1, 100.0, 2000.0);   //Perspective projection
+    float ratio = screenHeight * (1 / screenWidth);
+    int x = ratio * 4;
+    int x2 = ratio * -4;
+    cout << "X " << ratio << endl;
+
+
+    glFrustum(-4, 4, x, x2, 6, 2000);  //The camera view volume
+
+
     glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
@@ -1383,7 +1392,7 @@ void display(void)
         floor();
     glPopMatrix();
 
-        cout << "y " << rocketThrust << endl;
+    //cout << "y " << rocketThrust << endl;
 
 
     if (rocketThrust > 0)
@@ -1520,6 +1529,12 @@ void keyBoard (unsigned char key, int x, int y)
 }
 //-------------------------------------------------------------------
 
+void reshape(int width, int height)
+ {
+  screenWidth = width;
+  screenHeight = height;
+ }
+
 int main(int argc, char** argv)
 {
    glutInit(&argc, argv);
@@ -1534,7 +1549,9 @@ int main(int argc, char** argv)
    glutKeyboardFunc(keyBoard);
    glutTimerFunc(1,robot1Animation,0);
    glutTimerFunc(1,robot2Animation,0);
-    glutTimerFunc(1,light,0);
+   glutTimerFunc(1,light,0);
+   glutDisplayFunc(display);
+
 
 
 
