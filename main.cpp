@@ -54,8 +54,8 @@ float robot2x = -17.765;
 int cameraMode = 1;
 int camerateRotate = 0 ;
 int lighton = 0;
-float screenWidth = 720;
-float screenHeight = 900;
+float screenWidth = 900;
+float screenHeight = 720;
 
 
 
@@ -1091,7 +1091,6 @@ void drawRobot2()
 
 void robot2Animation(int time)
 {
-    glutPostRedisplay();
     if (robot2activate)
     { robot2z ++;
         }
@@ -1100,11 +1099,18 @@ void robot2Animation(int time)
 
 }
 
+void fps(int time)
+{
+    glutPostRedisplay();
+    glutTimerFunc(5,fps,time);
+
+}
+
+
 
 
 void robot1Animation(int time)
 {
-    glutPostRedisplay();
     int r = 4;
     int angleStep = 10;
 
@@ -1154,7 +1160,7 @@ void robot1Animation(int time)
 
 void cannonAnimation(int time)
 {
-    glutPostRedisplay();
+
     cannonFiring = 1;
     cannonBallZ += cos(30*(3.1415/180)) * 1.5 -  (  cos(30*(3.1415/180)) * 1.5 * 0.1) ;
     cannonBallY += (sin(30*(3.1415/180)) * 1.5) - (9.81 * 0.5 * pow(time*0.001,2));
@@ -1174,7 +1180,6 @@ void cannonAnimation(int time)
 
 void RocketFeetAnimation(int time)
 {
-    glutPostRedisplay();
 
     //cout << "Thrust :  " << rocketThrust << endl;
     if (rocketThrust < 100)
@@ -1285,13 +1290,6 @@ void initialise(void)
 
     gluQuadricTexture (q, GL_TRUE);
 
-
-
-}
-
-//---------------------------------------------------------------------
-void display(void)
-{
     glMatrixMode (GL_PROJECTION);
     glLoadIdentity ();
     //gluPerspective(50.0, 1, 100.0, 2000.0);   //Perspective projection
@@ -1301,10 +1299,19 @@ void display(void)
 	
 	glViewport(0,0,screenWidth,screenHeight); // makes it take up whole screen
 
-    glFrustum(-4* ratio, 4*ratio, -4,4, 6, 2000);  //The camera view volume
+    glFrustum(-4* ratio, 4*ratio, -4,4, 8, 2000);  //The camera view volume
 
 
-    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+}
+
+//---------------------------------------------------------------------
+void display(void)
+{
+	
+	    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+
+
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
@@ -1524,7 +1531,7 @@ void keyBoard (unsigned char key, int x, int y)
 
 
     //cout << "X " << player_x  << "Z " << player_z << "Angle " << angle << endl;
-    glutPostRedisplay();
+    
 
 }
 //-------------------------------------------------------------------
@@ -1552,7 +1559,8 @@ int main(int argc, char** argv)
    glutTimerFunc(1,light,0);
    glutDisplayFunc(display);
    glutReshapeFunc(reshape);
-   
+   glutTimerFunc(1,fps,0);
+
 
 
 
