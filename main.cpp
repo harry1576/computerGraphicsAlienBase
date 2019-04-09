@@ -51,6 +51,8 @@ GLUquadricObj*  q;
 int robot2activate = 0;
 float robot2z = 290;
 float robot2x = -17.765;
+int cameraMode = 1;
+int camerateRotate = 0 ;
 
 
 
@@ -1306,9 +1308,19 @@ void display(void)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
+	if (cameraMode){
+		gluLookAt(player_x, cam_hgt, player_z, player_x + cos(-angle * (M_PI/180)), cam_hgt, player_z + sin(-angle * (M_PI/180)), 0, 1, 0);
+	}
+	else
+	{
+		if (camerateRotate == 1){
+			glRotatef(rocketRotation+45,  0,  0,  1);
+	}
 
-    gluLookAt(player_x, cam_hgt, player_z, player_x + cos(-angle * (M_PI/180)), cam_hgt, player_z + sin(-angle * (M_PI/180)), 0, 1, 0);
-
+	gluLookAt(0,rocketHeight-20,-40.5,  0,  0, 0,  0, 0,  1);
+	}
+	
+	
     //gluLookAt (eye_x, 500, eye_z, xlook, 500, zlook, 0, 1, 0);  //camera rotation
 
 	float spot_pos[]={0, 0, 0};
@@ -1443,6 +1455,18 @@ void keyBoard (unsigned char key, int x, int y)
 	{
 		glutTimerFunc(1,RocketFeetAnimation,0);	   
 	}
+	
+	if (key == 'r' )
+	{
+		if (camerateRotate)
+		{
+			camerateRotate = 0;
+		}
+		else{
+			camerateRotate = 1;
+		}
+	}
+	
 }  
 
 
@@ -1477,6 +1501,14 @@ void keyBoard (unsigned char key, int x, int y)
         player_z += sin(-(angle-180) * (M_PI/180));
         distance_from_origin = pow(pow(player_x,2) + pow(player_z,2),0.5) ;
     }
+    else if (key == GLUT_KEY_HOME )
+	{
+		if (cameraMode)
+		{ cameraMode = 0;}
+		else{
+			cameraMode = 1;
+			};	   
+	}
 
 
     glTranslatef((cos(angle*(3.14/180))* distance_from_origin),0,-(sin(angle*(3.14/180))* distance_from_origin));
