@@ -1295,13 +1295,13 @@ void display(void)
     glMatrixMode (GL_PROJECTION);
     glLoadIdentity ();
     //gluPerspective(50.0, 1, 100.0, 2000.0);   //Perspective projection
-    float ratio = screenHeight * (1 / screenWidth);
-    int x = ratio * 4;
-    int x2 = ratio * -4;
-    cout << "X " << ratio << endl;
+    float ratio = screenWidth * (1 / screenHeight);
+  
+    //cout << "X " << ratio << endl;
+	
+	glViewport(0,0,screenWidth,screenHeight); // makes it take up whole screen
 
-
-    glFrustum(-4, 4, x, x2, 6, 2000);  //The camera view volume
+    glFrustum(-4* ratio, 4*ratio, -4,4, 6, 2000);  //The camera view volume
 
 
     glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
@@ -1551,6 +1551,8 @@ int main(int argc, char** argv)
    glutTimerFunc(1,robot2Animation,0);
    glutTimerFunc(1,light,0);
    glutDisplayFunc(display);
+   glutReshapeFunc(reshape);
+   
 
 
 
