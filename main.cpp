@@ -53,6 +53,7 @@ float robot2z = 290;
 float robot2x = -17.765;
 int cameraMode = 1;
 int camerateRotate = 0 ;
+int lighton = 0;
 
 
 
@@ -115,17 +116,17 @@ void floor()
     glMaterialfv(GL_FRONT, GL_SPECULAR, black);
     //The floor is made up of several tiny squares on a 200x200 grid. Each square has a unit size.
     glBegin(GL_QUADS);
-    for(int i = -175; i < 175; i+=1)
+    for(int i = -175; i < 175; i+=2)
     {
-        for(int j = -175;  j < 175; j+=1)
+        for(int j = -175;  j < 175; j+=2)
         {
-            if((i > 100 || i < -100) || (j  > 100 || j < -100)){
+            //if((i > 100 || i < -100) || (j  > 100 || j < -100)){
             glVertex3f(i, 490, j);
-            glVertex3f(i, 490, j+1);
-            glVertex3f(i+1, 490, j+1);
-            glVertex3f(i+1, 490, j);}
+            glVertex3f(i, 490, j+2);
+            glVertex3f(i+2, 490, j+2);
+            glVertex3f(i+2, 490, j);}
 
-        }
+        //}
     }
 
    glVertex3f(-1000, 484.9, -1000);
@@ -343,6 +344,18 @@ void drawRocket()
          glColor3f(1.00f, 0.00f, 0.00f);
          glutSolidTorus(5,8,10, 10);
 
+    glPopMatrix();
+
+
+   glPushMatrix();
+
+          glColor3f(0.43f, 1.0f, 0.00f);
+          glRotatef(-45,  0,  1,  0);
+          glTranslatef(0, 0, 20);
+          //glRotatef(90,  0,  0,  1);
+
+          glRotatef(55,  1,  0,  0);
+          gluCylinder(q,1,1,25,10,10);
     glPopMatrix();
 
 
@@ -864,61 +877,6 @@ void drawCastle()
 
 }
 
-void drawScorpion()
-{
-
-    // draw body
-
-    glColor3f(1.00f, 0.00f, 1.0f);
-
-    //body
-    glPushMatrix();
-        glScalef (10,3,5);
-        glRotatef(0,  0,  0,  1);
-        glutSolidCube(1);
-    glPopMatrix();
-
-    glColor3f(1.00f, 0.00f, 0.0f);
-
-    // upper leg
-    glPushMatrix();
-        glTranslatef(4, 0, 1);
-        //glRotatef(-20,  1,  0,  0);
-        glScalef (1,1,3);
-        glutSolidCube(1);
-    glPopMatrix();
-
-    glPushMatrix();
-        glTranslatef(4, 0, -1);
-        //glRotatef(-20,  1,  0,  0);
-        glScalef (1,1,3);
-        glutSolidCube(1);
-    glPopMatrix();
-
-    glPushMatrix();
-        glTranslatef(-4, 0, -1);
-        //glRotatef(-20,  1,  0,  0);
-        glScalef (1,1,3);
-        glutSolidCube(1);
-    glPopMatrix();
-
-    glPushMatrix();
-        glTranslatef(-4, 0, 1);
-        //glRotatef(-20,  1,  0,  0);
-        glScalef (1,1,3);
-        glutSolidCube(1);
-    glPopMatrix();
-
-    // lower leg
-    glPushMatrix();
-        glTranslatef(4, -0.8, 5.3);
-        glRotatef(50,  1,  0,  0);
-        glScalef (1,1,3);
-
-        glutSolidCube(1);
-    glPopMatrix();
-
-}
 
 
 void drawRobot1()
@@ -1249,6 +1207,28 @@ void RocketFeetAnimation(int time)
 
 }
 
+
+void light(int time)
+{
+    if(lighton && rocketThrust == 0)
+    {
+        glDisable(GL_LIGHT2);
+        lighton = 0;
+    }
+    else if(!lighton && rocketThrust == 0)
+    {
+        glEnable(GL_LIGHT2);
+        lighton = 1;
+    }
+
+    glutTimerFunc(1000,light,0);
+
+
+}
+
+
+
+
 //---------------------------------------------------------------------
 void initialise(void)
 {
@@ -1256,6 +1236,9 @@ void initialise(void)
     loadMeshFile("Cannon.off");             //Specify mesh file name here
 
     float white[4]  = {1.0, 0.0, 0.0, 1.0};
+
+    float green[4]  = {0.0, 1.0, 0.0, 1.0};
+
 
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
@@ -1280,10 +1263,10 @@ void initialise(void)
 
     glEnable(GL_LIGHT2);
     glLightfv(GL_LIGHT2, GL_AMBIENT, grey);
-    glLightfv(GL_LIGHT2, GL_DIFFUSE, white);
-    glLightfv(GL_LIGHT2, GL_SPECULAR, white);
-    glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 80.0);
-    glLightf(GL_LIGHT2, GL_SPOT_EXPONENT,80.0);
+    glLightfv(GL_LIGHT2, GL_DIFFUSE, green);
+    glLightfv(GL_LIGHT2, GL_SPECULAR, green);
+    glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 90.0);
+    glLightf(GL_LIGHT2, GL_SPOT_EXPONENT,90.0);
 
 
 
@@ -1333,6 +1316,8 @@ void display(void)
 
     float spot_pos[]={0, 0, 0};
     float SPOT_DIRECTION[] = {.6, -1.0,0.0};
+    float SPOT_DIRECTION2[] = {.7, -0.9,0.0};
+
 
 
     glPushMatrix();
@@ -1343,10 +1328,10 @@ void display(void)
     glPopMatrix();
 
     glPushMatrix();
-        glTranslatef(0,500,-40);
-        glRotatef(robot1AngleY - 90,0,1,0);
+        glTranslatef(0,rocketHeight-5,-22.5);
+        glRotatef(270 + rocketRotation,0,1,0);
         glLightfv(GL_LIGHT2, GL_POSITION, spot_pos);   //light position
-        glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, SPOT_DIRECTION);
+        glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, SPOT_DIRECTION2);
     glPopMatrix();
 
 
@@ -1398,6 +1383,7 @@ void display(void)
         floor();
     glPopMatrix();
 
+        cout << "y " << rocketThrust << endl;
 
 
     if (rocketThrust > 0)
@@ -1419,7 +1405,6 @@ void display(void)
         double length = sqrt(ypoint) * (rand() % 1000 + 1) * 0.001;
 
 
-        //cout << "y " << ypoint << endl;
 
 
         int theta = rand() % 360;
@@ -1549,6 +1534,9 @@ int main(int argc, char** argv)
    glutKeyboardFunc(keyBoard);
    glutTimerFunc(1,robot1Animation,0);
    glutTimerFunc(1,robot2Animation,0);
+    glutTimerFunc(1,light,0);
+
+
 
 
    glutMainLoop();
