@@ -30,7 +30,7 @@ double player_z = 166;
 float cam_hgt = 500; //Camera height
 int rocketRotation = 0;
 
-double cannonBallY	= 4;
+double cannonBallY  = 4;
 double cannonBallZ  = 68;
 int cannonFiring = 0;
 int rocketFeetAngle = 0;
@@ -116,23 +116,23 @@ void floor()
     //The floor is made up of several tiny squares on a 200x200 grid. Each square has a unit size.
     glBegin(GL_QUADS);
     for(int i = -175; i < 175; i+=1)
-    {	
+    {
         for(int j = -175;  j < 175; j+=1)
         {
-			if((i > 100 || i < -100) || (j  > 100 || j < -100)){
+            if((i > 100 || i < -100) || (j  > 100 || j < -100)){
             glVertex3f(i, 490, j);
             glVertex3f(i, 490, j+1);
             glVertex3f(i+1, 490, j+1);
             glVertex3f(i+1, 490, j);}
-       
+
         }
     }
-    
+
    glVertex3f(-1000, 484.9, -1000);
    glVertex3f(-1000, 484.9, 1000);
    glVertex3f(1000, 484.9, 1000);
    glVertex3f(1000, 484.9, -1000);
-    
+
     glMaterialfv(GL_FRONT, GL_SPECULAR, white);
     glEnd();
 
@@ -197,21 +197,21 @@ void loadGLTextures()               // Load bitmaps And Convert To Textures
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-	
-	
-	glBindTexture(GL_TEXTURE_2D, texId[7]);
+
+
+    glBindTexture(GL_TEXTURE_2D, texId[7]);
     loadTGA("alien3.tga");
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_REPEAT);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_REPEAT);
-    
+
     glBindTexture(GL_TEXTURE_2D, texId[8]);  //Use this texture name for the following OpenGL texture
     loadTGA("rust.tga");
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
     glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-    
-    
+
+
 
 
 }
@@ -250,18 +250,17 @@ void drawCannonMesh()
 
 
 void drawRocket()
-{	
-	int N = 9;
-	
-	float vy[N] = {-18,-15, -10, -6, 0.0};
-	float vx[N] = {0,26.25,45,56.25,60,56.25};
-	float vz[N] = {0};
+{
+    int N = 9;
 
-	float wx[N], wy[N], wz[N];
-	
-	glRotatef(rocketRotation+45,  0,  1,  0);
+    float vy[N] = {-18,-15, -10, -6, 0.0};
+    float vx[N] = {0,26.25,45,56.25,60,56.25};
+    float vz[N] = {0};
 
-    
+    float wx[N], wy[N], wz[N];
+
+    glRotatef(rocketRotation+45,  0,  1,  0);
+
     for(int j = 0; j < 36; j++)
     {
     for(int i = 0; i < N; i++)
@@ -273,6 +272,7 @@ void drawRocket()
     }
 
     glBegin(GL_TRIANGLE_STRIP);
+    glColor3f(0.43f, 1.0f, 0.00f);
 
 
         for(int i = 0; i < N; i++)
@@ -299,52 +299,53 @@ void drawRocket()
         }
     }
 
-	
      glEnd();
      for( int x = 0; x < 360; x+= 90)
      {
      glPushMatrix();
-     	glRotatef(x,  0,  1,  0);
-		 glTranslatef(30, 0, 0);
-		 
-		 glTranslatef(0, -rocketFeetAngle*0.03, 0);
+        glRotatef(x,  0,  1,  0);
+         glTranslatef(30, 0, 0);
 
-		 glRotatef(rocketFeetAngle,  0,  0,  1);
+         glTranslatef(0, -rocketFeetAngle*0.03, 0);
 
-		 glPushMatrix();
-			 
-			 glTranslatef(0, -20, 0);
-			 glColor3f(1.00f, 0.00f, 1.0f);
-			 glRotatef(30,  0,  0,  1);
-			 glScalef (3,40,3);
-			 glutSolidCube(1);
-		glPopMatrix();
-		glPushMatrix();
-			glTranslatef(9.5, -38, 0);
-			glRotatef(90,  1,  0,  0);
-			glutSolidTorus(3,3,10, 10);
-		glPopMatrix();
-	glPopMatrix();
-	}
-	
-	glPushMatrix();
-	     
-	     glTranslatef(0, 3, 0);
-	     glColor3f(1.00f, 0.00f, 1.0f);
-	     glutSolidSphere(20,50,50);
-	     
-	glPopMatrix();
+         glRotatef(rocketFeetAngle,  0,  0,  1);
 
-	glPushMatrix();
-		 
-		 glTranslatef(0, -17, 0);
-		 glRotatef(90,  1,  0,  0);
-	     glColor3f(1.00f, 0.00f, 0.00f);
-		 glutSolidTorus(5,8,10, 10);
-		 
-	glPopMatrix();
+         glPushMatrix();
+            //glColor3f(0.43f, 1.0f, 0.00f);
 
-    
+         glColor3f(0.00f, 0.0, 0.0f);
+             glTranslatef(0, -20, 0);
+             glRotatef(30,  0,  0,  1);
+             glScalef (3,40,3);
+             glutSolidCube(1);
+        glPopMatrix();
+        glPushMatrix();
+    glColor3f(0.43f, 1.0f, 0.00f);
+            glTranslatef(9.5, -38, 0);
+            glRotatef(90,  1,  0,  0);
+            glutSolidTorus(3,3,10, 10);
+        glPopMatrix();
+    glPopMatrix();
+    }
+
+    glPushMatrix();
+
+         glTranslatef(0, 3, 0);
+         glColor3f(0.00f, 0.0, 0.0f);
+         glutSolidSphere(20,50,50);
+
+    glPopMatrix();
+
+    glPushMatrix();
+
+         glTranslatef(0, -17, 0);
+         glRotatef(90,  1,  0,  0);
+         glColor3f(1.00f, 0.00f, 0.00f);
+         glutSolidTorus(5,8,10, 10);
+
+    glPopMatrix();
+
+
 }
 
 
@@ -424,7 +425,7 @@ void skybox(){
   glEnd();
 
   /////////////////////// FLOOR //////////////////////////
-    
+
   //glBindTexture(GL_TEXTURE_2D, texId[5]);
   //glColor3f(0, 1, 1);
   //glBegin(GL_QUADS);
@@ -449,10 +450,10 @@ void drawCannon()
 {
 
    glPushMatrix();
-		glTranslatef(-10.0,cannonBallY, cannonBallZ);
+        glTranslatef(-10.0,cannonBallY, cannonBallZ);
         glutSolidSphere(0.5, 10, 10);
    glPopMatrix();
-	
+
     glPushMatrix();
 
         glTranslatef(-10, 0.2, 67);
@@ -504,37 +505,37 @@ void drawCannon()
 
 void drawCastle()
 {
-	
+
     GLfloat lightpos[] = {800,800 ,800,0 };
 
-    
+
     glLightfv(GL_LIGHT0, GL_POSITION, lightpos);
- 
-    
+
+
     int cubeSize = 2;
-        
+
     glBindTexture(GL_TEXTURE_2D, texId[6]);
 
     glEnable(GL_TEXTURE_2D);
-    
+
     glBegin(GL_QUADS);
     glDisable(GL_TEXTURE_2D);
     glColor3f(0.00f, 1.00f, 1.0f);
 
-	glTexCoord2f(0., 3.); 
+    glTexCoord2f(0., 3.);
     glVertex3f(-51,35, -54);
-    glTexCoord2f(3., 3.); 
+    glTexCoord2f(3., 3.);
     glVertex3f(51, 35, -54);
-    glTexCoord2f(3., 0.); 
+    glTexCoord2f(3., 0.);
     glVertex3f(51, 0, -54);
-    glTexCoord2f(0., 0.); 
+    glTexCoord2f(0., 0.);
     glVertex3f(-51,0, -54);
-	
-	glTexCoord2f(0., 3.); 
+
+    glTexCoord2f(0., 3.);
     glVertex3f(-51,35, -56);
-    glTexCoord2f(3., 3.); 
+    glTexCoord2f(3., 3.);
     glVertex3f(51, 35, -56);
-    glTexCoord2f(3., 0.); 
+    glTexCoord2f(3., 0.);
     glVertex3f(51, 0, -56);
     glTexCoord2f(0., 0.);
     glVertex3f(-51,0, -56);
@@ -545,22 +546,22 @@ void drawCastle()
     glVertex3f( 51, 35,  -54);
 
     //glColor3f(0.f, 1.0f, 0.0f);
-	glTexCoord2f(0., 3.); 
+    glTexCoord2f(0., 3.);
     glVertex3f(-54,0, -51);
-    glTexCoord2f(3.0, 3.0); 
+    glTexCoord2f(3.0, 3.0);
     glVertex3f(-54, 0, 51);
-    glTexCoord2f(3., .0); 
+    glTexCoord2f(3., .0);
     glVertex3f(-54, 35, 51);
-    glTexCoord2f(0., 0.); 
+    glTexCoord2f(0., 0.);
     glVertex3f(-54,35, -51);
 
-	glTexCoord2f(0., 3.); 
+    glTexCoord2f(0., 3.);
     glVertex3f(-56,0, -51);
-    glTexCoord2f(3.0, 3.0); 
+    glTexCoord2f(3.0, 3.0);
     glVertex3f(-56, 0, 51);
     glTexCoord2f(3., .0);
     glVertex3f(-56, 35, 51);
-    glTexCoord2f(0., 0.); 
+    glTexCoord2f(0., 0.);
     glVertex3f(-56,35, -51);
 
     glVertex3f(-56,35, -51);
@@ -570,23 +571,23 @@ void drawCastle()
 
 
     //glColor3f(0.f, 0.0f, 1.0f);
-	glTexCoord2f(0., 3.); 
+    glTexCoord2f(0., 3.);
     glVertex3f(54,0, -51);
     glTexCoord2f(3.0, 3.0);
     glVertex3f(54, 0, 51);
     glTexCoord2f(3., .0);
     glVertex3f(54, 35, 51);
-    glTexCoord2f(0., 0.);  
+    glTexCoord2f(0., 0.);
     glVertex3f(54,35, -51);
 
 
-	glTexCoord2f(0., 3.); 
+    glTexCoord2f(0., 3.);
     glVertex3f(56,0, -51);
     glTexCoord2f(3.0, 3.0);
     glVertex3f(56, 0, 51);
     glTexCoord2f(3., .0);
     glVertex3f(56, 35, 51);
-    glTexCoord2f(0., 0.);  
+    glTexCoord2f(0., 0.);
     glVertex3f(56,35, -51);
 
     glVertex3f(56,35, -51);
@@ -595,60 +596,60 @@ void drawCastle()
     glVertex3f(56,35, 51);
 
     //glColor3f(1.0f, 0.0f, 1.0f);
-	
-	glTexCoord2f(0., 3.); 
+
+    glTexCoord2f(0., 3.);
     glVertex3f(-51,0, 54);
     glTexCoord2f(1.55, 3.0);
     glVertex3f(-5, 0, 54);
     glTexCoord2f(1.55, .0);
     glVertex3f(-5, 35, 54);
-    glTexCoord2f(0., 0.);  
+    glTexCoord2f(0., 0.);
     glVertex3f(-51,35, 54);
-	
-	
-	glTexCoord2f(0., 3.); 
+
+
+    glTexCoord2f(0., 3.);
     glVertex3f(5,0, 54);
     glTexCoord2f(1.55, 3.0);
     glVertex3f(51, 0, 54);
     glTexCoord2f(1.55, .0);
     glVertex3f(51, 35, 54);
-    glTexCoord2f(0., 0.);  
+    glTexCoord2f(0., 0.);
     glVertex3f(5,35, 54);
-	
-	glTexCoord2f(0., 2.); 
+
+    glTexCoord2f(0., 2.);
     glVertex3f(-5,8, 54);
     glTexCoord2f(.3, 2.0);
     glVertex3f(5, 8, 54);
     glTexCoord2f(.3, .0);
     glVertex3f(5, 35, 54);
-    glTexCoord2f(.0, 0.);  
+    glTexCoord2f(.0, 0.);
     glVertex3f(-5,35, 54);
 
-	glTexCoord2f(0., 3.); 
+    glTexCoord2f(0., 3.);
     glVertex3f(-51,0, 56);
     glTexCoord2f(1.55, 3.0);
     glVertex3f(-5, 0, 56);
     glTexCoord2f(1.55, .0);
     glVertex3f(-5, 35, 56);
-    glTexCoord2f(0., 0.);  
+    glTexCoord2f(0., 0.);
     glVertex3f(-51,35, 56);
 
-	glTexCoord2f(0., 3.); 
+    glTexCoord2f(0., 3.);
     glVertex3f(5,0, 56);
     glTexCoord2f(1.55, 3.0);
     glVertex3f(51, 0, 56);
     glTexCoord2f(1.55, .0);
     glVertex3f(51, 35, 56);
-    glTexCoord2f(0., 0.);  
+    glTexCoord2f(0., 0.);
     glVertex3f(5,35, 56);
 
-	glTexCoord2f(0., 2.67); 
+    glTexCoord2f(0., 2.67);
     glVertex3f(-5,8, 56);
     glTexCoord2f(.3, 2.67);
     glVertex3f(5, 8, 56);
     glTexCoord2f(0.3, .22);
     glVertex3f(5, 35, 56);
-    glTexCoord2f(0., 0.22);  
+    glTexCoord2f(0., 0.22);
     glVertex3f(-5,35, 56);
 
     //glColor3f(0.0f, 0.0f, 0.2f);
@@ -667,97 +668,97 @@ void drawCastle()
     glVertex3f(5,0, 54);
     glVertex3f(5,8, 54);
     glVertex3f(5,8, 56);
-	
+
     glDisable(GL_TEXTURE_2D);
 
-	glEnd();
+    glEnd();
 
-	 glDisable(GL_TEXTURE_2D);
+     glDisable(GL_TEXTURE_2D);
 
-	glDisable(GL_LIGHTING);                
+    glDisable(GL_LIGHTING);
 
-	glPushMatrix();
-	   
-		glColor3f(0.9f, 0.00f, 0.0f);
+    glPushMatrix();
 
-		glBegin(GL_QUADS);
-		glVertex3f(-5,12, 56.01);
-		glVertex3f(5,12, 56.01);
-		glVertex3f(5,35, 56.01);
-		glVertex3f(-5,35, 56.01);
-		glEnd();
-	glPopMatrix();
-	
-	glPushMatrix();
-	
-		glBegin(GL_TRIANGLES);
-		glVertex3f(-5,12, 56.01);
-		glVertex3f(0,8, 56.01);
-		glVertex3f(5,12, 56.01);
-		glEnd();
-	glPopMatrix();
-	    glDisable(GL_TEXTURE_2D);
+        glColor3f(0.9f, 0.00f, 0.0f);
 
-	
-		
-	//glPushMatrix();
-		//glBegin(GL_QUADS);
-		//glVertex3f(-5,12, 53.99);
-		//glVertex3f(5,12,  53.99);
-		//glVertex3f(5,35,  53.99);
-		//glVertex3f(-5,35,  53.99);
-		//glEnd();
-	//glPopMatrix();
-	
-	//glPushMatrix();
-		//glBegin(GL_TRIANGLES);
-		//glVertex3f(-5,12,  53.99);
-		//glVertex3f(0,8,  53.99);
-		//glVertex3f(5,12,  53.99);
-		//glEnd();
-	//glPopMatrix();
-	
-		glDisable(GL_LIGHTING);                
+        glBegin(GL_QUADS);
+        glVertex3f(-5,12, 56.01);
+        glVertex3f(5,12, 56.01);
+        glVertex3f(5,35, 56.01);
+        glVertex3f(-5,35, 56.01);
+        glEnd();
+    glPopMatrix();
 
-	glEnable(GL_LIGHTING);                
+    glPushMatrix();
 
-	glPushMatrix();
-	glBindTexture(GL_TEXTURE_2D, texId[7]);
-		glEnable(GL_TEXTURE_2D);
-		glBegin(GL_QUADS);
-		
-		glTexCoord2f(1, 1); 
-		glVertex3f(-3,17.5, 56.02);
-		glTexCoord2f(0., 1.0); 
-		glVertex3f(3,17.5, 56.02);
-		glTexCoord2f(0., 0.); 
-		glVertex3f(3,30, 56.02);
-		glTexCoord2f(1, 0.0); 
-		glVertex3f(-3,30, 56.02);
-		
-		glEnd();
-	glPopMatrix();
-	
-	
-	//glPushMatrix();
-	//glBindTexture(GL_TEXTURE_2D, texId[7]);
-		//glEnable(GL_TEXTURE_2D);
-		//glBegin(GL_QUADS);
-		
-		//glTexCoord2f(1, 1); 
-		//glVertex3f(-3,17.5, 53.98);
-		//glTexCoord2f(0., 1.0); 
-		//glVertex3f(3,17.5, 53.98);
-		//glTexCoord2f(0., 0.); 
-		//glVertex3f(3,30, 53.98);
-		//glTexCoord2f(1, 0.0); 
-		//glVertex3f(-3,30, 53.98);
-		
-		//glEnd();
-	//glPopMatrix();
+        glBegin(GL_TRIANGLES);
+        glVertex3f(-5,12, 56.01);
+        glVertex3f(0,8, 56.01);
+        glVertex3f(5,12, 56.01);
+        glEnd();
+    glPopMatrix();
+        glDisable(GL_TEXTURE_2D);
 
-	
-	glDisable(GL_TEXTURE_2D);
+
+
+    //glPushMatrix();
+        //glBegin(GL_QUADS);
+        //glVertex3f(-5,12, 53.99);
+        //glVertex3f(5,12,  53.99);
+        //glVertex3f(5,35,  53.99);
+        //glVertex3f(-5,35,  53.99);
+        //glEnd();
+    //glPopMatrix();
+
+    //glPushMatrix();
+        //glBegin(GL_TRIANGLES);
+        //glVertex3f(-5,12,  53.99);
+        //glVertex3f(0,8,  53.99);
+        //glVertex3f(5,12,  53.99);
+        //glEnd();
+    //glPopMatrix();
+
+        glDisable(GL_LIGHTING);
+
+    glEnable(GL_LIGHTING);
+
+    glPushMatrix();
+    glBindTexture(GL_TEXTURE_2D, texId[7]);
+        glEnable(GL_TEXTURE_2D);
+        glBegin(GL_QUADS);
+
+        glTexCoord2f(1, 1);
+        glVertex3f(-3,17.5, 56.02);
+        glTexCoord2f(0., 1.0);
+        glVertex3f(3,17.5, 56.02);
+        glTexCoord2f(0., 0.);
+        glVertex3f(3,30, 56.02);
+        glTexCoord2f(1, 0.0);
+        glVertex3f(-3,30, 56.02);
+
+        glEnd();
+    glPopMatrix();
+
+
+    //glPushMatrix();
+    //glBindTexture(GL_TEXTURE_2D, texId[7]);
+        //glEnable(GL_TEXTURE_2D);
+        //glBegin(GL_QUADS);
+
+        //glTexCoord2f(1, 1);
+        //glVertex3f(-3,17.5, 53.98);
+        //glTexCoord2f(0., 1.0);
+        //glVertex3f(3,17.5, 53.98);
+        //glTexCoord2f(0., 0.);
+        //glVertex3f(3,30, 53.98);
+        //glTexCoord2f(1, 0.0);
+        //glVertex3f(-3,30, 53.98);
+
+        //glEnd();
+    //glPopMatrix();
+
+
+    glDisable(GL_TEXTURE_2D);
 
 
 
@@ -858,113 +859,113 @@ void drawCastle()
         glPopMatrix();
         }
     }
- 
+
     glDisable(GL_TEXTURE_2D);
 
 }
 
 void drawScorpion()
 {
-	
-	// draw body
-	
-	glColor3f(1.00f, 0.00f, 1.0f);
-	
-	//body
-	glPushMatrix();
-		glScalef (10,3,5);
-		glRotatef(0,  0,  0,  1);
-		glutSolidCube(1);
-	glPopMatrix();
-	
-	glColor3f(1.00f, 0.00f, 0.0f);
-	
-	// upper leg
-	glPushMatrix();
-		glTranslatef(4, 0, 1);
-		//glRotatef(-20,  1,  0,  0);
-		glScalef (1,1,3);
-		glutSolidCube(1);
-	glPopMatrix();
-	
-	glPushMatrix();
-		glTranslatef(4, 0, -1);
-		//glRotatef(-20,  1,  0,  0);
-		glScalef (1,1,3);
-		glutSolidCube(1);
-	glPopMatrix();
 
-	glPushMatrix();
-		glTranslatef(-4, 0, -1);
-		//glRotatef(-20,  1,  0,  0);
-		glScalef (1,1,3);
-		glutSolidCube(1);
-	glPopMatrix();
+    // draw body
 
-	glPushMatrix();
-		glTranslatef(-4, 0, 1);
-		//glRotatef(-20,  1,  0,  0);
-		glScalef (1,1,3);
-		glutSolidCube(1);
-	glPopMatrix();
-		
-	// lower leg
-	glPushMatrix();
-		glTranslatef(4, -0.8, 5.3);
-		glRotatef(50,  1,  0,  0);
-		glScalef (1,1,3);
+    glColor3f(1.00f, 0.00f, 1.0f);
 
-		glutSolidCube(1);
-	glPopMatrix();
+    //body
+    glPushMatrix();
+        glScalef (10,3,5);
+        glRotatef(0,  0,  0,  1);
+        glutSolidCube(1);
+    glPopMatrix();
+
+    glColor3f(1.00f, 0.00f, 0.0f);
+
+    // upper leg
+    glPushMatrix();
+        glTranslatef(4, 0, 1);
+        //glRotatef(-20,  1,  0,  0);
+        glScalef (1,1,3);
+        glutSolidCube(1);
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(4, 0, -1);
+        //glRotatef(-20,  1,  0,  0);
+        glScalef (1,1,3);
+        glutSolidCube(1);
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(-4, 0, -1);
+        //glRotatef(-20,  1,  0,  0);
+        glScalef (1,1,3);
+        glutSolidCube(1);
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(-4, 0, 1);
+        //glRotatef(-20,  1,  0,  0);
+        glScalef (1,1,3);
+        glutSolidCube(1);
+    glPopMatrix();
+
+    // lower leg
+    glPushMatrix();
+        glTranslatef(4, -0.8, 5.3);
+        glRotatef(50,  1,  0,  0);
+        glScalef (1,1,3);
+
+        glutSolidCube(1);
+    glPopMatrix();
 
 }
 
 
 void drawRobot1()
 {
-	
-	
-	glEnable(GL_LIGHTING);
-	glPushMatrix();
-	glRotatef(robot1AngleY,0,1,0);
+
+
+    glEnable(GL_LIGHTING);
+    glPushMatrix();
+    glRotatef(robot1AngleY,0,1,0);
 
     glPushMatrix();
-		glTranslatef(0.6, 5.5, 1.4);
-		glutSolidSphere(0.3, 50, 50 );
-	glPopMatrix();
-	
-	glPushMatrix();
-		glTranslatef(-0.6, 5.5, 1.4);
-		glutSolidSphere(0.3, 50, 50 );
-	glPopMatrix();
-	
-	glPushMatrix();
-		glTranslatef(0, 6, 0);
-		glScalef(0.2,5,0.2);
-		glutSolidCube(1);
-	glPopMatrix();
-	glPopMatrix();
-	
-	
-	
-	glEnable(GL_TEXTURE_2D);
-	glBindTexture(GL_TEXTURE_2D, texId[8]);
+        glTranslatef(0.6, 5.5, 1.4);
+        glutSolidSphere(0.3, 50, 50 );
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(-0.6, 5.5, 1.4);
+        glutSolidSphere(0.3, 50, 50 );
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(0, 6, 0);
+        glScalef(0.2,5,0.2);
+        glutSolidCube(1);
+    glPopMatrix();
+    glPopMatrix();
+
+
+
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texId[8]);
     glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
-	glPushMatrix();
-		glRotatef(robot1AngleZ,0,0,1);
-		glRotatef(robot1AngleX,1,0,0);
-		gluSphere ( q, 4.0, 50, 50 );
-	glPopMatrix();
-	glPushMatrix();	
-		glTranslatef(0, 5.4, 0);
-				glRotatef(robot1AngleY,0,0,1);
-		glutSolidCube(3);
-	glPopMatrix();
-	
+    glPushMatrix();
+        glRotatef(robot1AngleZ,0,0,1);
+        glRotatef(robot1AngleX,1,0,0);
+        gluSphere ( q, 4.0, 50, 50 );
+    glPopMatrix();
+    glPushMatrix();
+        glTranslatef(0, 5.4, 0);
+                glRotatef(robot1AngleY,0,0,1);
+        glutSolidCube(3);
+    glPopMatrix();
+
 
     glDisable(GL_TEXTURE_2D);
 
-	
+
 }
 
 
@@ -972,221 +973,221 @@ void drawRobot1()
 void drawArm()
 {
 
-		glPushMatrix();
-			glTranslatef(-8.40,0,0);
-			glRotatef(90,1,0,0);
-			glutSolidTorus(0.4,0.7,20,20);
-		
-		glPopMatrix();
-	
-		glPushMatrix();
-			glTranslatef(-4,0,0);
+        glPushMatrix();
+            glTranslatef(-8.40,0,0);
+            glRotatef(90,1,0,0);
+            glutSolidTorus(0.4,0.7,20,20);
 
-			glScalef (8,0.5,0.5);
-			glutSolidCube(1);
-		glPopMatrix();
+        glPopMatrix();
+
+        glPushMatrix();
+            glTranslatef(-4,0,0);
+
+            glScalef (8,0.5,0.5);
+            glutSolidCube(1);
+        glPopMatrix();
 
 
 }
 
 void drawRobot2()
-{		
-		//glRotatef(270,0,1,0);
-		glPushMatrix();
-			glTranslatef(-2.5,3,-2.50);
-			glRotatef(25,0,0,1);
-		drawArm();
+{
+        //glRotatef(270,0,1,0);
+        glPushMatrix();
+            glTranslatef(-2.5,3,-2.50);
+            glRotatef(25,0,0,1);
+        drawArm();
 
-		glPopMatrix();
+        glPopMatrix();
 
-	
-		glPushMatrix();
-			glColor3f(0.98f, 0.96f, 0.27f);
 
-			glTranslatef(-5.5,1,-3.8);
-			glScalef (2,1,1);
-			glutSolidCube(1);
-			glColor3f(1.0f, 0.0f, 0.0f);
+        glPushMatrix();
+            glColor3f(0.98f, 0.96f, 0.27f);
 
-		glPopMatrix();
-	
-	
-		glPushMatrix();
-			glTranslatef(-2.5,3,-2.5);
-			glScalef (0.5,0.5,0.5);
-			glutSolidSphere(2,20,20);
-			glColor3f(0.474,0.470,0.403);
-		glPopMatrix();
-		
-		glPushMatrix();
-			glColor3f(1.0f, 0.0f, 0.0f);
+            glTranslatef(-5.5,1,-3.8);
+            glScalef (2,1,1);
+            glutSolidCube(1);
+            glColor3f(1.0f, 0.0f, 0.0f);
 
-			glTranslatef(-2.5,2,-2.5);
-			glScalef (0.5,3,0.5);
-			glutSolidCube(1);
-		glPopMatrix();
-	
-		glPushMatrix();
-			glColor3f(1.0f, 0.0f, 0.0f);
+        glPopMatrix();
 
-			glTranslatef(-2.5,0,-2.5);
-			glScalef (8,1,3.5);
-			glutSolidCube(1);
-		glPopMatrix();
-		
-		glColor3f(0.474,0.470,0.403);
 
-		glPushMatrix();
-		glTranslatef(-5,0,0);
-		glPushMatrix();
-			glScalef (0.3,0.3,5);
-			glTranslatef(0,0,-0.5);
-			glutSolidCube(1);
-		glPopMatrix();
-		glPushMatrix();
-			glTranslatef(0,0,-5);
-			glPushMatrix();
-				glutSolidSphere(0.3,50,50);
-			glPopMatrix();
+        glPushMatrix();
+            glTranslatef(-2.5,3,-2.5);
+            glScalef (0.5,0.5,0.5);
+            glutSolidSphere(2,20,20);
+            glColor3f(0.474,0.470,0.403);
+        glPopMatrix();
 
-			glPushMatrix();
-				glScalef (3,0.1,0.1);
-				glutSolidCube(1);
-			glPopMatrix();
-			
-			glPushMatrix();
-				glScalef (0.1,3,0.1);
-				glutSolidCube(1);
-			glPopMatrix();
-			glutSolidTorus(0.375,1.5,20,20);
-	
-		glPopMatrix();
-		
-		
-		glPushMatrix();
-			glPushMatrix();
-				glutSolidSphere(0.3,50,50);
-			glPopMatrix();
+        glPushMatrix();
+            glColor3f(1.0f, 0.0f, 0.0f);
 
-			glPushMatrix();
-				glScalef (3,0.1,0.1);
-				glutSolidCube(1);
-			glPopMatrix();
-			
-			glPushMatrix();
-				glScalef (0.1,3,0.1);
-				glutSolidCube(1);
-			glPopMatrix();
-			
-			glutSolidTorus(0.375,1.5,20,20);
-		glPopMatrix();
-			glColor3f(0.474,0.470,0.403);
+            glTranslatef(-2.5,2,-2.5);
+            glScalef (0.5,3,0.5);
+            glutSolidCube(1);
+        glPopMatrix();
 
-	glPopMatrix();
-	
-	glPushMatrix();
-		glPushMatrix();
-			glScalef (0.3,0.3,5);
-			glTranslatef(0,0,-0.5);
-			glutSolidCube(1);
-		glPopMatrix();
-		glPushMatrix();
-			glTranslatef(0,0,-5);
-			glPushMatrix();
-				glutSolidSphere(0.3,50,50);
-			glPopMatrix();
+        glPushMatrix();
+            glColor3f(1.0f, 0.0f, 0.0f);
 
-			glPushMatrix();
-				glScalef (3,0.1,0.1);
-				glutSolidCube(1);
-			glPopMatrix();
-			
-			glPushMatrix();
-				glScalef (0.1,3,0.1);
-				glutSolidCube(1);
-			glPopMatrix();
-			
-			glutSolidTorus(0.375,1.5,20,20);
-		glPopMatrix();
-		glPushMatrix();
-			glPushMatrix();
-				glutSolidSphere(0.3,50,50);
-			glPopMatrix();
+            glTranslatef(-2.5,0,-2.5);
+            glScalef (8,1,3.5);
+            glutSolidCube(1);
+        glPopMatrix();
 
-			glPushMatrix();
-				glScalef (3,0.1,0.1);
-				glutSolidCube(1);
-			glPopMatrix();
-			
-			glPushMatrix();
-				glScalef (0.1,3,0.1);
-				glutSolidCube(1);
-			glPopMatrix();
-			
-			glutSolidTorus(0.375,1.5,20,20);
-		glPopMatrix();
-	glPopMatrix();
+        glColor3f(0.474,0.470,0.403);
+
+        glPushMatrix();
+        glTranslatef(-5,0,0);
+        glPushMatrix();
+            glScalef (0.3,0.3,5);
+            glTranslatef(0,0,-0.5);
+            glutSolidCube(1);
+        glPopMatrix();
+        glPushMatrix();
+            glTranslatef(0,0,-5);
+            glPushMatrix();
+                glutSolidSphere(0.3,50,50);
+            glPopMatrix();
+
+            glPushMatrix();
+                glScalef (3,0.1,0.1);
+                glutSolidCube(1);
+            glPopMatrix();
+
+            glPushMatrix();
+                glScalef (0.1,3,0.1);
+                glutSolidCube(1);
+            glPopMatrix();
+            glutSolidTorus(0.375,1.5,20,20);
+
+        glPopMatrix();
+
+
+        glPushMatrix();
+            glPushMatrix();
+                glutSolidSphere(0.3,50,50);
+            glPopMatrix();
+
+            glPushMatrix();
+                glScalef (3,0.1,0.1);
+                glutSolidCube(1);
+            glPopMatrix();
+
+            glPushMatrix();
+                glScalef (0.1,3,0.1);
+                glutSolidCube(1);
+            glPopMatrix();
+
+            glutSolidTorus(0.375,1.5,20,20);
+        glPopMatrix();
+            glColor3f(0.474,0.470,0.403);
+
+    glPopMatrix();
+
+    glPushMatrix();
+        glPushMatrix();
+            glScalef (0.3,0.3,5);
+            glTranslatef(0,0,-0.5);
+            glutSolidCube(1);
+        glPopMatrix();
+        glPushMatrix();
+            glTranslatef(0,0,-5);
+            glPushMatrix();
+                glutSolidSphere(0.3,50,50);
+            glPopMatrix();
+
+            glPushMatrix();
+                glScalef (3,0.1,0.1);
+                glutSolidCube(1);
+            glPopMatrix();
+
+            glPushMatrix();
+                glScalef (0.1,3,0.1);
+                glutSolidCube(1);
+            glPopMatrix();
+
+            glutSolidTorus(0.375,1.5,20,20);
+        glPopMatrix();
+        glPushMatrix();
+            glPushMatrix();
+                glutSolidSphere(0.3,50,50);
+            glPopMatrix();
+
+            glPushMatrix();
+                glScalef (3,0.1,0.1);
+                glutSolidCube(1);
+            glPopMatrix();
+
+            glPushMatrix();
+                glScalef (0.1,3,0.1);
+                glutSolidCube(1);
+            glPopMatrix();
+
+            glutSolidTorus(0.375,1.5,20,20);
+        glPopMatrix();
+    glPopMatrix();
 }
 
 
 void robot2Animation(int time)
-{	
-	glutPostRedisplay();
-	if (robot2activate)
-	{ robot2z ++;		
-		}
-	
-	glutTimerFunc(25,robot2Animation,time);
+{
+    glutPostRedisplay();
+    if (robot2activate)
+    { robot2z ++;
+        }
+
+    glutTimerFunc(25,robot2Animation,time);
 
 }
 
 
 
 void robot1Animation(int time)
-{	
-	glutPostRedisplay();
-	int r = 4;
-	int angleStep = 10;
-	
-	if (robot1Z == 130 && robot1X < 130)
-	{
-		robot1X += (r * 2 * M_PI)/(360/angleStep); 
-		robot1AngleX = 0;
-		robot1AngleZ -= angleStep;
-		robot1AngleY = 90;
+{
+    glutPostRedisplay();
+    int r = 4;
+    int angleStep = 10;
 
-	}
-	else if (robot1X >= 130 && robot1Z > -130)
-	{
-		robot1Z -= (r * 2 * M_PI)/(360/angleStep);
-		robot1AngleZ = 0; 
-		robot1AngleX -= angleStep;
-		robot1AngleY = 180;
+    if (robot1Z == 130 && robot1X < 130)
+    {
+        robot1X += (r * 2 * M_PI)/(360/angleStep);
+        robot1AngleX = 0;
+        robot1AngleZ -= angleStep;
+        robot1AngleY = 90;
 
-	}
-	else if (robot1Z <= -130 && robot1X > -130)
-	{
-		robot1X -= (r * 2 * M_PI)/(360/angleStep);
-		robot1AngleX = 0; 
-		robot1AngleZ += angleStep;
-		robot1AngleY = 270;
+    }
+    else if (robot1X >= 130 && robot1Z > -130)
+    {
+        robot1Z -= (r * 2 * M_PI)/(360/angleStep);
+        robot1AngleZ = 0;
+        robot1AngleX -= angleStep;
+        robot1AngleY = 180;
 
-	}
-	else if (robot1X <= -130 && robot1Z < 130)
-	{
-		robot1Z += (r * 2 * M_PI)/(360/angleStep);
-		robot1AngleX += angleStep; 
-		robot1AngleZ = 0;
-		robot1AngleY = 0;
+    }
+    else if (robot1Z <= -130 && robot1X > -130)
+    {
+        robot1X -= (r * 2 * M_PI)/(360/angleStep);
+        robot1AngleX = 0;
+        robot1AngleZ += angleStep;
+        robot1AngleY = 270;
 
-	}
-	
-	
-	//robot1Z += (r * 2 * M_PI)/(360/angleStep) ;
-	//robot1AngleX += angleStep;
-	
-	
-	glutTimerFunc(25,robot1Animation,time);
+    }
+    else if (robot1X <= -130 && robot1Z < 130)
+    {
+        robot1Z += (r * 2 * M_PI)/(360/angleStep);
+        robot1AngleX += angleStep;
+        robot1AngleZ = 0;
+        robot1AngleY = 0;
+
+    }
+
+
+    //robot1Z += (r * 2 * M_PI)/(360/angleStep) ;
+    //robot1AngleX += angleStep;
+
+
+    glutTimerFunc(25,robot1Animation,time);
 
 }
 
@@ -1198,53 +1199,53 @@ void cannonAnimation(int time)
     cannonFiring = 1;
     cannonBallZ += cos(30*(3.1415/180)) * 1.5 -  (  cos(30*(3.1415/180)) * 1.5 * 0.1) ;
     cannonBallY += (sin(30*(3.1415/180)) * 1.5) - (9.81 * 0.5 * pow(time*0.001,2));
-     
+
     time += 10;
     if (cannonBallY > -1 && robot2activate == 0)
     {
     glutTimerFunc(9,cannonAnimation,time);
-	}
-	else
-	{
-	    cannonFiring = 0;
-	    robot2activate = 1;
+    }
+    else
+    {
+        cannonFiring = 0;
+        robot2activate = 1;
 
-	}
+    }
 }
 
 void RocketFeetAnimation(int time)
 {
-	glutPostRedisplay();
+    glutPostRedisplay();
 
-	//cout << "Thrust :  " << rocketThrust << endl;
-	if (rocketThrust < 100)
-	{
-		rocketThrust ++;
-		glutTimerFunc(30,RocketFeetAnimation,0);
+    //cout << "Thrust :  " << rocketThrust << endl;
+    if (rocketThrust < 100)
+    {
+        rocketThrust ++;
+        glutTimerFunc(30,RocketFeetAnimation,0);
 
-	}
+    }
     else
     {
-	if (rocketThrust < 400)
+    if (rocketThrust < 400)
     {rocketThrust ++;
-		rocketHeight += 0.2;}
-	if (rocketThrust >= 400 && rocketHeight < 980)
+        rocketHeight += 0.2;}
+    if (rocketThrust >= 400 && rocketHeight < 980)
     {rocketThrust ++;
-		rocketHeight += 1;}
-	
-    
-	if (rocketFeetAngle < 70)
-	{
-			rocketFeetAngle += 3;
-			glutTimerFunc(30,RocketFeetAnimation,0);
-	}
-	else
-	{
-		rocketRotation += 1;
-		glutTimerFunc(15,RocketFeetAnimation,0);
-	
-	}
-	}
+        rocketHeight += 1;}
+
+
+    if (rocketFeetAngle < 70)
+    {
+            rocketFeetAngle += 3;
+            glutTimerFunc(30,RocketFeetAnimation,0);
+    }
+    else
+    {
+        rocketRotation += 1;
+        glutTimerFunc(15,RocketFeetAnimation,0);
+
+    }
+    }
 
 }
 
@@ -1252,22 +1253,22 @@ void RocketFeetAnimation(int time)
 void initialise(void)
 {
     loadGLTextures();
-	loadMeshFile("Cannon.off");             //Specify mesh file name here
-	
+    loadMeshFile("Cannon.off");             //Specify mesh file name here
+
     float white[4]  = {1.0, 0.0, 0.0, 1.0};
-	
+
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_TEXTURE_2D);
     glEnable(GL_NORMALIZE);
     glClearColor (0.0, 0.0, 0.0, 0.0);
-    
+
     glEnable(GL_LIGHTING);                  //Enable OpenGL states
     glEnable(GL_LIGHT0);
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
     glEnable(GL_COLOR_MATERIAL);
     glEnable(GL_DEPTH_TEST);
     glEnable(GL_NORMALIZE);
-    
+
 
     float grey[4] = {0.2, 0.2, 0.2, 1.0};
     glEnable(GL_LIGHT1);
@@ -1276,20 +1277,27 @@ void initialise(void)
     glLightfv(GL_LIGHT1, GL_SPECULAR, white);
     glLightf(GL_LIGHT1, GL_SPOT_CUTOFF, 80.0);
     glLightf(GL_LIGHT1, GL_SPOT_EXPONENT,80.0);
-   
+
+    glEnable(GL_LIGHT2);
+    glLightfv(GL_LIGHT2, GL_AMBIENT, grey);
+    glLightfv(GL_LIGHT2, GL_DIFFUSE, white);
+    glLightfv(GL_LIGHT2, GL_SPECULAR, white);
+    glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 80.0);
+    glLightf(GL_LIGHT2, GL_SPOT_EXPONENT,80.0);
+
 
 
 
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
-    
-    
+
+
     glMaterialfv(GL_FRONT, GL_SPECULAR, white);
     glMaterialf(GL_FRONT, GL_SHININESS, 50);
-    
+
     q =  gluNewQuadric ( );
     gluQuadricDrawStyle (q, GLU_FILL );
     gluQuadricNormals   (q, GLU_SMOOTH );
-    
+
 
     gluQuadricTexture (q, GL_TRUE);
 
@@ -1308,34 +1316,41 @@ void display(void)
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
-	if (cameraMode){
-		gluLookAt(player_x, cam_hgt, player_z, player_x + cos(-angle * (M_PI/180)), cam_hgt, player_z + sin(-angle * (M_PI/180)), 0, 1, 0);
-	}
-	else
-	{
-		if (camerateRotate == 1){
-			glRotatef(rocketRotation+45,  0,  0,  1);
-	}
+    if (cameraMode){
+        gluLookAt(player_x, cam_hgt, player_z, player_x + cos(-angle * (M_PI/180)), cam_hgt, player_z + sin(-angle * (M_PI/180)), 0, 1, 0);
+    }
+    else
+    {
+        if (camerateRotate == 1){
+            glRotatef(rocketRotation+45,  0,  0,  1);
+    }
 
-	gluLookAt(0,rocketHeight-20,-40.5,  0,  0, 0,  0, 0,  1);
-	}
-	
-	
+    gluLookAt(0,rocketHeight-20,-40.5,  0,  0, 0,  0, 0,  1);
+    }
+
+
     //gluLookAt (eye_x, 500, eye_z, xlook, 500, zlook, 0, 1, 0);  //camera rotation
 
-	float spot_pos[]={0, 0, 0};
+    float spot_pos[]={0, 0, 0};
     float SPOT_DIRECTION[] = {.6, -1.0,0.0};
 
 
-	glPushMatrix();
-		glTranslatef(robot1X,520,robot1Z);
-		glRotatef(robot1AngleY - 90,0,1,0);
-		glLightfv(GL_LIGHT1, GL_POSITION, spot_pos);   //light position
-		glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, SPOT_DIRECTION);
-	glPopMatrix();
+    glPushMatrix();
+        glTranslatef(robot1X,520,robot1Z);
+        glRotatef(robot1AngleY - 90,0,1,0);
+        glLightfv(GL_LIGHT1, GL_POSITION, spot_pos);   //light position
+        glLightfv(GL_LIGHT1, GL_SPOT_DIRECTION, SPOT_DIRECTION);
+    glPopMatrix();
 
-    
-    
+    glPushMatrix();
+        glTranslatef(0,500,-40);
+        glRotatef(robot1AngleY - 90,0,1,0);
+        glLightfv(GL_LIGHT2, GL_POSITION, spot_pos);   //light position
+        glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, SPOT_DIRECTION);
+    glPopMatrix();
+
+
+
 
     glPushMatrix();
         glTranslatef(0, 490, 0);
@@ -1350,94 +1365,94 @@ void display(void)
         glTranslatef(0, rocketHeight, -40);
         glScalef (1,1,1);
         drawRocket();
-		glColor3f(1.00f, 1.00f, 0.00f);
+        glColor3f(1.00f, 1.00f, 0.00f);
 
     glPopMatrix();
     // no marks for code?
-    
+
     glPushMatrix();
         glTranslatef(00, 490, 200);
-		//drawScorpion();
+        //drawScorpion();
     glPopMatrix();
-    
+
     glPushMatrix();
         glTranslatef(-5, 490, 60);
         glScalef (1.5,1.5,1.5);
-		drawCannon();
+        drawCannon();
     glPopMatrix();
-    
-    
+
+
     glPushMatrix();
         glTranslatef(robot2x, 488, robot2z);
         glRotatef(90,0,1,0);
-		drawRobot2();
-	glPopMatrix();
+        drawRobot2();
+    glPopMatrix();
 
-    
+
     glPushMatrix();
         glTranslatef(robot1X, 494.5, robot1Z);
-		drawRobot1();
-	glPopMatrix();
+        drawRobot1();
+    glPopMatrix();
 
-	glPushMatrix();
-		floor();
-	glPopMatrix();
-	
-	
-    
-	if (rocketThrust > 0)
-	{
-	glDisable(GL_LIGHTING);                  
+    glPushMatrix();
+        floor();
+    glPopMatrix();
+
+
+
+    if (rocketThrust > 0)
+    {
+    glDisable(GL_LIGHTING);
     glPointSize(6.6);
-    
+
     for(int x = 0; x < rocketThrust; x++)
-    {	
-		
-		
-		//int xpoint = rand() % 5;
-		
-		//int ypoint = 0.5 * (xpoint * xpoint);
-		
-		double ypoint = (rand() % 250) * 0.1; //* (rand() % 100000)/100000;
-		
-		
-		double length = sqrt(ypoint) * (rand() % 1000 + 1) * 0.001;
-		
-		
-		//cout << "y " << ypoint << endl;
+    {
 
-		
-		int theta = rand() % 360;
-		
-	
-		double xpoint = (length * sin(theta * (M_PI/180)));
-		double zpoint = (length * cos(theta * (M_PI/180)));
-		
-		
-		
-		int colourPicker = rand() % 5;
 
-		
-		glBegin(GL_POINTS);
+        //int xpoint = rand() % 5;
 
-		if (colourPicker == 0){glColor3f(0.95f, 1.00f, 0.06f);}
-		else if (colourPicker ==1){glColor3f(0.95f, 0.69f, 0.25f);}
-		else if (colourPicker ==2){glColor3f(0.89, 0.72, 0.13);}
-		else if (colourPicker ==3){glColor3f(0.89f, 0.47f, 0.13);}
-		else if (colourPicker ==4){glColor3f(0.89f, 0.13f, 0.17f);}
-		
+        //int ypoint = 0.5 * (xpoint * xpoint);
 
-		
-		
-	    glVertex3d(xpoint, (rocketHeight - 35) + ypoint,zpoint-40);
-	    
-	    
+        double ypoint = (rand() % 250) * 0.1; //* (rand() % 100000)/100000;
 
-		glEnd();
-	}	
-	glEnable(GL_LIGHTING);                
 
-	}
+        double length = sqrt(ypoint) * (rand() % 1000 + 1) * 0.001;
+
+
+        //cout << "y " << ypoint << endl;
+
+
+        int theta = rand() % 360;
+
+
+        double xpoint = (length * sin(theta * (M_PI/180)));
+        double zpoint = (length * cos(theta * (M_PI/180)));
+
+
+
+        int colourPicker = rand() % 5;
+
+
+        glBegin(GL_POINTS);
+
+        if (colourPicker == 0){glColor3f(0.95f, 1.00f, 0.06f);}
+        else if (colourPicker ==1){glColor3f(0.95f, 0.69f, 0.25f);}
+        else if (colourPicker ==2){glColor3f(0.89, 0.72, 0.13);}
+        else if (colourPicker ==3){glColor3f(0.89f, 0.47f, 0.13);}
+        else if (colourPicker ==4){glColor3f(0.89f, 0.13f, 0.17f);}
+
+
+
+
+        glVertex3d(xpoint, (rocketHeight - 35) + ypoint,zpoint-40);
+
+
+
+        glEnd();
+    }
+    glEnable(GL_LIGHTING);
+
+    }
     //glEnable(GL_TEXTURE_2D);
     //glBindTexture(GL_TEXTURE_2D, texId[6]);
     glutSwapBuffers();
@@ -1445,29 +1460,29 @@ void display(void)
 
 void keyBoard (unsigned char key, int x, int y)
 {
-	if (key == 'c' && cannonFiring == 0)
-	{
-		cannonBallY	= 4;
-		cannonBallZ  = 68;
-		glutTimerFunc(1,cannonAnimation,0);
-	}
-	if (key == 's' && rocketThrust == 0)
-	{
-		glutTimerFunc(1,RocketFeetAnimation,0);	   
-	}
-	
-	if (key == 'r' )
-	{
-		if (camerateRotate)
-		{
-			camerateRotate = 0;
-		}
-		else{
-			camerateRotate = 1;
-		}
-	}
-	
-}  
+    if (key == 'c' && cannonFiring == 0)
+    {
+        cannonBallY = 4;
+        cannonBallZ  = 68;
+        glutTimerFunc(1,cannonAnimation,0);
+    }
+    if (key == 's' && rocketThrust == 0)
+    {
+        glutTimerFunc(1,RocketFeetAnimation,0);
+    }
+
+    if (key == 'r' )
+    {
+        if (camerateRotate)
+        {
+            camerateRotate = 0;
+        }
+        else{
+            camerateRotate = 1;
+        }
+    }
+
+}
 
 
 //--------------------------------------------------------------
@@ -1502,16 +1517,16 @@ void keyBoard (unsigned char key, int x, int y)
         distance_from_origin = pow(pow(player_x,2) + pow(player_z,2),0.5) ;
     }
     else if (key == GLUT_KEY_HOME )
-	{
-		if (cameraMode)
-		{ cameraMode = 0;}
-		else{
-			cameraMode = 1;
-			};	   
-	}
+    {
+        if (cameraMode)
+        { cameraMode = 0;}
+        else{
+            cameraMode = 1;
+            };
+    }
 
 
-    glTranslatef((cos(angle*(3.14/180))* distance_from_origin),0,-(sin(angle*(3.14/180))* distance_from_origin));
+    //glTranslatef((cos(angle*(3.14/180))* distance_from_origin),0,-(sin(angle*(3.14/180))* distance_from_origin));
 
 
     //cout << "X " << player_x  << "Z " << player_z << "Angle " << angle << endl;
@@ -1523,7 +1538,7 @@ void keyBoard (unsigned char key, int x, int y)
 int main(int argc, char** argv)
 {
    glutInit(&argc, argv);
-   glutInitDisplayMode (GLUT_SINGLE | GLUT_DEPTH );
+   glutInitDisplayMode (GLUT_DOUBLE | GLUT_DEPTH );
    glutInitWindowSize (900, 720);
    glutInitWindowPosition (50, 50);
 
@@ -1532,9 +1547,9 @@ int main(int argc, char** argv)
    glutDisplayFunc(display);
    glutSpecialFunc(special);
    glutKeyboardFunc(keyBoard);
-   glutTimerFunc(1,robot1Animation,0);	
-   glutTimerFunc(1,robot2Animation,0);	   
-   
+   glutTimerFunc(1,robot1Animation,0);
+   glutTimerFunc(1,robot2Animation,0);
+
 
    glutMainLoop();
    return 0;
