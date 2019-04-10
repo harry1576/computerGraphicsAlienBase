@@ -1173,7 +1173,7 @@ void cannonAnimation(int time)
 
     if (cannonBallY > -1 && robot2activate == 0)
     {
-		glutTimerFunc(1,cannonAnimation,time);
+    glutTimerFunc(1,cannonAnimation,time);
     }
     else
     {
