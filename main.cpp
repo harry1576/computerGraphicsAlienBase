@@ -1166,13 +1166,14 @@ void cannonAnimation(int time)
 {
 	glutPostRedisplay();
     cannonFiring = 1;
-    cannonBallZ += cos(30*(3.1415/180)) * 1.5  ;
-    cannonBallY += (sin(30*(3.1415/180)) * 1.5) - (9.81 * 0.5 * pow(time*0.001,2));
 
-    time += 10;
+    cannonBallZ = (cos(30*(3.1415/180)) * 30 * time*0.05) + 68;
+    cannonBallY = ((sin(30*(3.1415/180)) * 30 * time*0.05) - (9.81 * 0.5 * pow(time*0.05,2))) + 4;
+   	time += 1;
+
     if (cannonBallY > -1 && robot2activate == 0)
     {
-    glutTimerFunc(1,cannonAnimation,time);
+		glutTimerFunc(1,cannonAnimation,time);
     }
     else
     {
@@ -1476,7 +1477,7 @@ void keyBoard (unsigned char key, int x, int y)
     {
         cannonBallY = 4;
         cannonBallZ  = 68;
-        glutTimerFunc(0,cannonAnimation,0);
+        glutTimerFunc(0,cannonAnimation,1);
     }
     if (key == 's' && rocketThrust == 0)
     {
