@@ -43,6 +43,8 @@ float robot1AngleX = 0;
 float robot1AngleZ = 0;
 float robot1AngleY = 0;
 
+float ratio;
+
 float *x, *y, *z;  //vertex coordinate arrays
 int *t1, *t2, *t3; //triangles
 int nvrt, ntri;    //total number of vertices and triangles
@@ -56,7 +58,7 @@ int camerateRotate = 0 ;
 int lighton = 0;
 float screenWidth = 900;
 float screenHeight = 720;
-
+int pass = 1;
 
 
 
@@ -125,9 +127,9 @@ void floor()
             glVertex3f(i, 490, j);
             glVertex3f(i, 490, j+2);
             glVertex3f(i+2, 490, j+2);
-            glVertex3f(i+2, 490, j);}
+            glVertex3f(i+2, 490, j);//}
 
-        //}
+        }
     }
 
    glVertex3f(-1000, 484.9, -1000);
@@ -1151,8 +1153,10 @@ void robot1Animation(int time)
     //robot1Z += (r * 2 * M_PI)/(360/angleStep) ;
     //robot1AngleX += angleStep;
 
+    //glutPostRedisplay();
 
-    glutTimerFunc(25,robot1Animation,time);
+    glutTimerFunc(15,robot1Animation,time);
+
 
 }
 
@@ -1160,7 +1164,7 @@ void robot1Animation(int time)
 
 void cannonAnimation(int time)
 {
-
+	glutPostRedisplay();
     cannonFiring = 1;
     cannonBallZ += cos(30*(3.1415/180)) * 1.5 -  (  cos(30*(3.1415/180)) * 1.5 * 0.1) ;
     cannonBallY += (sin(30*(3.1415/180)) * 1.5) - (9.81 * 0.5 * pow(time*0.001,2));
@@ -1168,7 +1172,7 @@ void cannonAnimation(int time)
     time += 10;
     if (cannonBallY > -1 && robot2activate == 0)
     {
-    glutTimerFunc(9,cannonAnimation,time);
+    glutTimerFunc(1,cannonAnimation,time);
     }
     else
     {
@@ -1289,17 +1293,23 @@ void initialise(void)
 
 
     gluQuadricTexture (q, GL_TRUE);
-
-    glMatrixMode (GL_PROJECTION);
+    	glMatrixMode (GL_PROJECTION);
     glLoadIdentity ();
     //gluPerspective(50.0, 1, 100.0, 2000.0);   //Perspective projection
-    float ratio = screenWidth * (1 / screenHeight);
-  
+ 
     //cout << "X " << ratio << endl;
 	
 	glViewport(0,0,screenWidth,screenHeight); // makes it take up whole screen
-
     glFrustum(-4* ratio, 4*ratio, -4,4, 8, 2000);  //The camera view volume
+    
+    if(pass ==1){
+		   glutTimerFunc(10,robot1Animation,0);
+   glutTimerFunc(10,robot2Animation,0);
+   glutTimerFunc(10,light,0);
+   glutTimerFunc(10,fps,0);
+   pass = 0;}
+
+
 
 
 }
@@ -1308,7 +1318,8 @@ void initialise(void)
 void display(void)
 {
 	
-	    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 
 
 
@@ -1465,11 +1476,11 @@ void keyBoard (unsigned char key, int x, int y)
     {
         cannonBallY = 4;
         cannonBallZ  = 68;
-        glutTimerFunc(1,cannonAnimation,0);
+        glutTimerFunc(0,cannonAnimation,0);
     }
     if (key == 's' && rocketThrust == 0)
     {
-        glutTimerFunc(1,RocketFeetAnimation,0);
+        glutTimerFunc(0,RocketFeetAnimation,0);
     }
 
     if (key == 'r' )
@@ -1529,7 +1540,7 @@ void keyBoard (unsigned char key, int x, int y)
 
     //glTranslatef((cos(angle*(3.14/180))* distance_from_origin),0,-(sin(angle*(3.14/180))* distance_from_origin));
 
-
+	glutPostRedisplay();
     //cout << "X " << player_x  << "Z " << player_z << "Angle " << angle << endl;
     
 
@@ -1540,13 +1551,25 @@ void reshape(int width, int height)
  {
   screenWidth = width;
   screenHeight = height;
+  ratio = screenWidth * (1 / screenHeight);
+
+	glMatrixMode (GL_PROJECTION);
+    glLoadIdentity ();
+    //gluPerspective(50.0, 1, 100.0, 2000.0);   //Perspective projection
+ 
+    //cout << "X " << ratio << endl;
+	
+	glViewport(0,0,screenWidth,screenHeight); // makes it take up whole screen
+
+    glFrustum(-4* ratio, 4*ratio, -4,4, 8, 2000);  //The camera view volume
+
  }
 
 int main(int argc, char** argv)
 {
    glutInit(&argc, argv);
    glutInitDisplayMode (GLUT_DOUBLE | GLUT_DEPTH );
-   glutInitWindowSize (900, 720);
+   glutInitWindowSize (1200, 900);
    glutInitWindowPosition (50, 50);
 
    glutCreateWindow ("hdo27 COSC363 Assignment 1");
@@ -1554,12 +1577,9 @@ int main(int argc, char** argv)
    glutDisplayFunc(display);
    glutSpecialFunc(special);
    glutKeyboardFunc(keyBoard);
-   glutTimerFunc(1,robot1Animation,0);
-   glutTimerFunc(1,robot2Animation,0);
-   glutTimerFunc(1,light,0);
    glutDisplayFunc(display);
    glutReshapeFunc(reshape);
-   glutTimerFunc(1,fps,0);
+   
 
 
 
