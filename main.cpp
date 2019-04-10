@@ -24,9 +24,9 @@ using namespace std;
 float lookAngle = 0.0;      //Camera rotation
 float eye_z, eye_x;
 double distance_from_origin = 0;
-double angle = 0;  //Rotation angle for viewing
-double player_x = -15;
-double player_z = 166;
+double angle = 90;  //Rotation angle for viewing
+double player_x = -0;
+double player_z = 300;
 float cam_hgt = 500; //Camera height
 int rocketRotation = 0;
 
@@ -1166,7 +1166,7 @@ void cannonAnimation(int time)
 {
 	glutPostRedisplay();
     cannonFiring = 1;
-    cannonBallZ += cos(30*(3.1415/180)) * 1.5 -  (  cos(30*(3.1415/180)) * 1.5 * 0.1) ;
+    cannonBallZ += cos(30*(3.1415/180)) * 1.5  ;
     cannonBallY += (sin(30*(3.1415/180)) * 1.5) - (9.81 * 0.5 * pow(time*0.001,2));
 
     time += 10;
