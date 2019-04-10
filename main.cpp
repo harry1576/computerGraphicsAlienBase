@@ -61,8 +61,9 @@ float screenHeight = 720;
 int pass = 1;
 
 
-
-
+  int r = 4;
+    int angleStep = 5;
+float constant = (r * 2 * M_PI);
 
 GLuint texId[8];
 
@@ -123,11 +124,25 @@ void floor()
     {
         for(int j = -175;  j < 175; j+=2)
         {
-            //if((i > 100 || i < -100) || (j  > 100 || j < -100)){
+            if((i > 100 || i < -100) || (j  > 100 || j < -100)){
             glVertex3f(i, 490, j);
             glVertex3f(i, 490, j+2);
             glVertex3f(i+2, 490, j+2);
-            glVertex3f(i+2, 490, j);//}
+            glVertex3f(i+2, 490, j);
+            }
+
+        }
+    }
+    
+     for(int i = -30; i < 30; i+=2)
+    {
+        for(int j = -20;  j < 30; j+=2)
+        {
+            
+            glVertex3f(i, 490, j);
+            glVertex3f(i, 490, j+2);
+            glVertex3f(i+2, 490, j+2);
+            glVertex3f(i+2, 490, j);
 
         }
     }
@@ -734,7 +749,6 @@ void drawCastle()
         //glEnd();
     //glPopMatrix();
 
-        glDisable(GL_LIGHTING);
 
     glEnable(GL_LIGHTING);
 
@@ -1104,7 +1118,7 @@ void robot2Animation(int time)
 void fps(int time)
 {
     glutPostRedisplay();
-    glutTimerFunc(5,fps,time);
+    glutTimerFunc(0,fps,time);
 
 }
 
@@ -1113,12 +1127,11 @@ void fps(int time)
 
 void robot1Animation(int time)
 {
-    int r = 4;
-    int angleStep = 10;
+  
 
     if (robot1Z == 130 && robot1X < 130)
     {
-        robot1X += (r * 2 * M_PI)/(360/angleStep);
+        robot1X += constant/(360/angleStep);
         robot1AngleX = 0;
         robot1AngleZ -= angleStep;
         robot1AngleY = 90;
@@ -1126,7 +1139,7 @@ void robot1Animation(int time)
     }
     else if (robot1X >= 130 && robot1Z > -130)
     {
-        robot1Z -= (r * 2 * M_PI)/(360/angleStep);
+        robot1Z -= constant/(360/angleStep);
         robot1AngleZ = 0;
         robot1AngleX -= angleStep;
         robot1AngleY = 180;
@@ -1134,7 +1147,7 @@ void robot1Animation(int time)
     }
     else if (robot1Z <= -130 && robot1X > -130)
     {
-        robot1X -= (r * 2 * M_PI)/(360/angleStep);
+        robot1X -= constant/(360/angleStep);
         robot1AngleX = 0;
         robot1AngleZ += angleStep;
         robot1AngleY = 270;
@@ -1142,7 +1155,7 @@ void robot1Animation(int time)
     }
     else if (robot1X <= -130 && robot1Z < 130)
     {
-        robot1Z += (r * 2 * M_PI)/(360/angleStep);
+        robot1Z += constant/(360/angleStep);
         robot1AngleX += angleStep;
         robot1AngleZ = 0;
         robot1AngleY = 0;
@@ -1155,7 +1168,7 @@ void robot1Animation(int time)
 
     //glutPostRedisplay();
 
-    glutTimerFunc(15,robot1Animation,time);
+    glutTimerFunc(1,robot1Animation,time);
 
 
 }
@@ -1167,8 +1180,8 @@ void cannonAnimation(int time)
 	glutPostRedisplay();
     cannonFiring = 1;
 
-    cannonBallZ = (cos(30*(3.1415/180)) * 30 * time*0.05) + 68;
-    cannonBallY = ((sin(30*(3.1415/180)) * 30 * time*0.05) - (9.81 * 0.5 * pow(time*0.05,2))) + 4;
+    cannonBallZ = (cos(30*(M_PI/180)) * 30 * time*0.05) + 68;
+    cannonBallY = ((sin(30*(M_PI/180)) * 30 * time*0.05) - (9.81 * 0.5 * pow(time*0.05,2))) + 4;
    	time += 1;
 
     if (cannonBallY > -1 && robot2activate == 0)
@@ -1260,8 +1273,7 @@ void initialise(void)
     glEnable(GL_LIGHT0);
     glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
     glEnable(GL_COLOR_MATERIAL);
-    glEnable(GL_DEPTH_TEST);
-    glEnable(GL_NORMALIZE);
+
 
 
     float grey[4] = {0.2, 0.2, 0.2, 1.0};
@@ -1278,11 +1290,6 @@ void initialise(void)
     glLightfv(GL_LIGHT2, GL_SPECULAR, green);
     glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 89.0);
     glLightf(GL_LIGHT2, GL_SPOT_EXPONENT,90.0);
-
-
-
-
-    glColorMaterial(GL_FRONT, GL_AMBIENT_AND_DIFFUSE);
 
 
     glMaterialfv(GL_FRONT, GL_SPECULAR, white);
@@ -1321,9 +1328,6 @@ void display(void)
 	
 
 	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
-
-
-
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
@@ -1376,22 +1380,17 @@ void display(void)
     glPushMatrix();
 
         glTranslatef(0, rocketHeight, -40);
-        glScalef (1,1,1);
         drawRocket();
         glColor3f(1.00f, 1.00f, 0.00f);
 
     glPopMatrix();
     // no marks for code?
 
-    glPushMatrix();
-        glTranslatef(00, 490, 200);
-        //drawScorpion();
-    glPopMatrix();
 
     glPushMatrix();
         glTranslatef(-5, 490, 60);
         glScalef (1.5,1.5,1.5);
-        drawCannon();
+       drawCannon();
     glPopMatrix();
 
 
@@ -1504,17 +1503,17 @@ void keyBoard (unsigned char key, int x, int y)
     if(key == GLUT_KEY_LEFT)
     {
         angle+= 5;
-        glTranslatef(-(cos(angle*(3.14/180))* distance_from_origin),0,-(sin(angle*(M_PI/180))* distance_from_origin));
+        glTranslatef(-(cos(angle*(M_PI/180))* distance_from_origin),0,-(sin(angle*(M_PI/180))* distance_from_origin));
         glRotatef(angle, 0.0, 1.0, 0.0);        //rotate the whole scene
-        glTranslatef((cos(angle*(3.14/180))* distance_from_origin),0,-(sin(angle*(M_PI/180))* distance_from_origin));
+        glTranslatef((cos(angle*(M_PI/180))* distance_from_origin),0,-(sin(angle*(M_PI/180))* distance_from_origin));
 
     }
     else if(key == GLUT_KEY_RIGHT)
     {
         angle-= 5;
-        glTranslatef(-(cos(angle*(3.14/180))* distance_from_origin),0,-(sin(angle*(M_PI/180))* distance_from_origin));
+        glTranslatef(-(cos(angle*(M_PI/180))* distance_from_origin),0,-(sin(angle*(M_PI/180))* distance_from_origin));
         glRotatef(angle, 0.0, 1.0, 0.0);        //rotate the whole scene
-        glTranslatef((cos(angle*(3.14/180))* distance_from_origin),0,-(sin(angle*(M_PI/180))* distance_from_origin));
+        glTranslatef((cos(angle*(M_PI/180))* distance_from_origin),0,-(sin(angle*(M_PI/180))* distance_from_origin));
 
     }
     else if(key == GLUT_KEY_UP)
@@ -1541,7 +1540,7 @@ void keyBoard (unsigned char key, int x, int y)
 
     //glTranslatef((cos(angle*(3.14/180))* distance_from_origin),0,-(sin(angle*(3.14/180))* distance_from_origin));
 
-	glutPostRedisplay();
+	//glutPostRedisplay();
     //cout << "X " << player_x  << "Z " << player_z << "Angle " << angle << endl;
     
 
@@ -1578,15 +1577,8 @@ int main(int argc, char** argv)
    glutDisplayFunc(display);
    glutSpecialFunc(special);
    glutKeyboardFunc(keyBoard);
-   glutDisplayFunc(display);
    glutReshapeFunc(reshape);
    
-
-
-
-
-
-
    glutMainLoop();
    return 0;
 }
