@@ -24,7 +24,7 @@ using namespace std;
 float lookAngle = 0.0;      //Camera rotation
 float eye_z, eye_x;
 double distance_from_origin = 0;
-double angle = 90;  //Rotation angle for viewing
+double angle = 180;  //Rotation angle for viewing
 double player_x = -0;
 double player_z = 300;
 float cam_hgt = 500; //Camera height
@@ -1398,7 +1398,10 @@ void display(void)
 
 
     glPushMatrix();
-        glTranslatef(robot2x, 488, robot2z);
+
+        glTranslatef(robot2x, 495, robot2z);
+                glScalef (1.8,1.8,1.8);
+
         glRotatef(90,0,1,0);
         drawRobot2();
     glPopMatrix();
