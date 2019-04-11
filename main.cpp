@@ -133,12 +133,12 @@ void floor()
 
         }
     }
-    
-     for(int i = -30; i < 30; i+=2)
+
+     for(int i = -20; i < 20; i+=2)
     {
-        for(int j = -20;  j < 30; j+=2)
+        for(int j = -20;  j < 40; j+=2)
         {
-            
+
             glVertex3f(i, 490, j);
             glVertex3f(i, 490, j+2);
             glVertex3f(i+2, 490, j+2);
@@ -903,7 +903,7 @@ void drawRobot1()
     glEnable(GL_LIGHTING);
     glPushMatrix();
     glRotatef(robot1AngleY,0,1,0);
-
+            glColor3f(1.0f, 0.0f, 0.0f);
     glPushMatrix();
         glTranslatef(0.6, 5.5, 1.4);
         glutSolidSphere(0.3, 50, 50 );
@@ -1127,7 +1127,7 @@ void fps(int time)
 
 void robot1Animation(int time)
 {
-  
+
 
     if (robot1Z == 130 && robot1X < 130)
     {
@@ -1177,12 +1177,12 @@ void robot1Animation(int time)
 
 void cannonAnimation(int time)
 {
-	glutPostRedisplay();
+    glutPostRedisplay();
     cannonFiring = 1;
 
     cannonBallZ = (cos(30*(M_PI/180)) * 30 * time*0.05) + 68;
     cannonBallY = ((sin(30*(M_PI/180)) * 30 * time*0.05) - (9.81 * 0.5 * pow(time*0.05,2))) + 4;
-   	time += 1;
+    time += 1;
 
     if (cannonBallY > -1 && robot2activate == 0)
     {
@@ -1301,17 +1301,17 @@ void initialise(void)
 
 
     gluQuadricTexture (q, GL_TRUE);
-    	glMatrixMode (GL_PROJECTION);
+        glMatrixMode (GL_PROJECTION);
     glLoadIdentity ();
     //gluPerspective(50.0, 1, 100.0, 2000.0);   //Perspective projection
- 
+
     //cout << "X " << ratio << endl;
-	
-	glViewport(0,0,screenWidth,screenHeight); // makes it take up whole screen
+
+    glViewport(0,0,screenWidth,screenHeight); // makes it take up whole screen
     glFrustum(-4* ratio, 4*ratio, -4,4, 8, 2000);  //The camera view volume
-    
+
     if(pass ==1){
-		   glutTimerFunc(10,robot1Animation,0);
+           glutTimerFunc(10,robot1Animation,0);
    glutTimerFunc(10,robot2Animation,0);
    glutTimerFunc(10,light,0);
    glutTimerFunc(10,fps,0);
@@ -1325,9 +1325,9 @@ void initialise(void)
 //---------------------------------------------------------------------
 void display(void)
 {
-	
 
-	glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
+
+    glClear (GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
     glMatrixMode(GL_MODELVIEW);
     glLoadIdentity();
 
@@ -1347,8 +1347,11 @@ void display(void)
     //gluLookAt (eye_x, 500, eye_z, xlook, 500, zlook, 0, 1, 0);  //camera rotation
 
     float spot_pos[]={0, 0, 0};
+
+
+
     float SPOT_DIRECTION[] = {.6, -1.0,0.0};
-    float SPOT_DIRECTION2[] = {.7, -0.9,0.0};
+    float SPOT_DIRECTION2[] = {1.0, -1.0,0.0};
 
 
 
@@ -1360,7 +1363,7 @@ void display(void)
     glPopMatrix();
 
     glPushMatrix();
-        glTranslatef(0,rocketHeight-5,-22.5);
+        glTranslatef(0,rocketHeight-10,-23);
         glRotatef(270 + rocketRotation,0,1,0);
         glLightfv(GL_LIGHT2, GL_POSITION, spot_pos);   //light position
         glLightfv(GL_LIGHT2, GL_SPOT_DIRECTION, SPOT_DIRECTION2);
@@ -1540,9 +1543,9 @@ void keyBoard (unsigned char key, int x, int y)
 
     //glTranslatef((cos(angle*(3.14/180))* distance_from_origin),0,-(sin(angle*(3.14/180))* distance_from_origin));
 
-	//glutPostRedisplay();
+    //glutPostRedisplay();
     //cout << "X " << player_x  << "Z " << player_z << "Angle " << angle << endl;
-    
+
 
 }
 //-------------------------------------------------------------------
@@ -1553,13 +1556,13 @@ void reshape(int width, int height)
   screenHeight = height;
   ratio = screenWidth * (1 / screenHeight);
 
-	glMatrixMode (GL_PROJECTION);
+    glMatrixMode (GL_PROJECTION);
     glLoadIdentity ();
     //gluPerspective(50.0, 1, 100.0, 2000.0);   //Perspective projection
- 
+
     //cout << "X " << ratio << endl;
-	
-	glViewport(0,0,screenWidth,screenHeight); // makes it take up whole screen
+
+    glViewport(0,0,screenWidth,screenHeight); // makes it take up whole screen
 
     glFrustum(-4* ratio, 4*ratio, -4,4, 8, 2000);  //The camera view volume
 
@@ -1578,7 +1581,7 @@ int main(int argc, char** argv)
    glutSpecialFunc(special);
    glutKeyboardFunc(keyBoard);
    glutReshapeFunc(reshape);
-   
+
    glutMainLoop();
    return 0;
 }
