@@ -1328,7 +1328,7 @@ void cannonAnimation(int time)
     cannonBallY = ((sin(30*(M_PI/180)) * 30 * time*0.05) - (9.81 * 0.5 * pow(time*0.05,2))) + 4;
     time += 1;
 
-    if (cannonBallY > -1 && robot2activate == 0)
+    if (cannonBallY > -1)
     {
     glutTimerFunc(1,cannonAnimation,time);
     }
