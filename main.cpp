@@ -24,7 +24,7 @@ using namespace std;
 float lookAngle = 0.0;      //Camera rotation
 float eye_z, eye_x;
 double distance_from_origin = 0;
-double angle = 180;  //Rotation angle for viewing
+double angle = 90;  //Rotation angle for viewing
 double player_x = -0;
 double player_z = 300;
 float cam_hgt = 500; //Camera height
@@ -37,11 +37,18 @@ int rocketFeetAngle = 0;
 int rocketThrust = 0;
 float rocketHeight = 530;
 
-float robot1X = 0;
-float robot1Z = 130;
+float robot1X = 130;
+float robot1Z = -130;
 float robot1AngleX = 0;
 float robot1AngleZ = 0;
 float robot1AngleY = 0;
+
+float robot3X = -130;
+float robot3Z = 130;
+float robot3AngleX = 0;
+float robot3AngleZ = 0;
+float robot3AngleY = 0;
+
 
 float ratio;
 
@@ -933,7 +940,55 @@ void drawRobot1()
     glPopMatrix();
     glPushMatrix();
         glTranslatef(0, 5.4, 0);
-                glRotatef(robot1AngleY,0,0,1);
+        glRotatef(robot1AngleY,0,0,1);
+        glutSolidCube(3);
+    glPopMatrix();
+
+
+    glDisable(GL_TEXTURE_2D);
+
+
+}
+
+
+void drawRobot3()
+{
+
+
+    glEnable(GL_LIGHTING);
+    glPushMatrix();
+    glRotatef(robot3AngleY,0,1,0);
+            glColor3f(1.0f, 0.0f, 0.0f);
+    glPushMatrix();
+        glTranslatef(0.6, 5.5, 1.4);
+        glutSolidSphere(0.3, 50, 50 );
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(-0.6, 5.5, 1.4);
+        glutSolidSphere(0.3, 50, 50 );
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(0, 6, 0);
+        glScalef(0.2,5,0.2);
+        glutSolidCube(1);
+    glPopMatrix();
+    glPopMatrix();
+
+
+
+    glEnable(GL_TEXTURE_2D);
+    glBindTexture(GL_TEXTURE_2D, texId[8]);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+    glPushMatrix();
+        glRotatef(robot3AngleZ,0,0,1);
+        glRotatef(robot3AngleX,1,0,0);
+        gluSphere ( q, 4.0, 50, 50 );
+    glPopMatrix();
+    glPushMatrix();
+        glTranslatef(0, 5.4, 0);
+        glRotatef(robot3AngleY,0,0,1);
         glutSolidCube(3);
     glPopMatrix();
 
@@ -968,39 +1023,70 @@ void drawArm()
 void drawRobot2()
 {
         //glRotatef(270,0,1,0);
+
+        glPushMatrix();
+            glTranslatef(2.8,4,-2.50);
+            glutSolidSphere(0.5,20,20);
+        glPopMatrix();
+
+        glPushMatrix();
+            glTranslatef(-2.25,5,-2.50);
+            glRotatef(90,1,0,0);
+            gluCylinder(q,1.8,1.8,5,10,10);
+        glPopMatrix();
+
+
+        glPushMatrix();
+            glTranslatef(5,5,-2.50);
+            glRotatef(90,0,1,0);
+            glRotatef(90,1,0,0);
+            gluCylinder(q,1.8,1.8,5,10,10);
+        glPopMatrix();
+
+
+
+        glPushMatrix();
+            glTranslatef(-2.25,5,-2.50);
+            glRotatef(90,0,1,0);
+            glRotatef(90,1,0,0);
+            gluCylinder(q,1.8,1.8,5,10,10);
+        glPopMatrix();
+
+
+        glPushMatrix();
+            glTranslatef(-1.5,4,-2.50);
+            glRotatef(90,0,1,0);
+            //glRotatef(90,1,0,0);
+            gluCylinder(q,0.2,0.2,4,10,10);
+        glPopMatrix();
+
+
+
         glPushMatrix();
             glTranslatef(-2.5,3,-2.50);
             glRotatef(25,0,0,1);
-        drawArm();
+        //drawArm();
 
         glPopMatrix();
 
 
-        glPushMatrix();
-            glColor3f(0.98f, 0.96f, 0.27f);
-
-            glTranslatef(-5.5,1,-3.8);
-            glScalef (2,1,1);
-            glutSolidCube(1);
-            glColor3f(1.0f, 0.0f, 0.0f);
-
-        glPopMatrix();
 
 
-        glPushMatrix();
-            glTranslatef(-2.5,3,-2.5);
-            glScalef (0.5,0.5,0.5);
-            glutSolidSphere(2,20,20);
-            glColor3f(0.474,0.470,0.403);
-        glPopMatrix();
 
-        glPushMatrix();
-            glColor3f(1.0f, 0.0f, 0.0f);
+        //glPushMatrix();
+            //glTranslatef(-2.5,3,-2.5);
+            //glScalef (0.5,0.5,0.5);
+            //glutSolidSphere(2,20,20);
+            //glColor3f(0.474,0.470,0.403);
+        //glPopMatrix();
 
-            glTranslatef(-2.5,2,-2.5);
-            glScalef (0.5,3,0.5);
-            glutSolidCube(1);
-        glPopMatrix();
+        //glPushMatrix();
+            //glColor3f(1.0f, 0.0f, 0.0f);
+
+            //glTranslatef(-2.5,2,-2.5);
+            //glScalef (0.5,3,0.5);
+            //glutSolidCube(1);
+        //glPopMatrix();
 
         glPushMatrix();
             glColor3f(1.0f, 0.0f, 0.0f);
@@ -1105,6 +1191,8 @@ void drawRobot2()
 }
 
 
+
+
 void robot2Animation(int time)
 {
     if (robot2activate)
@@ -1129,7 +1217,7 @@ void robot1Animation(int time)
 {
 
 
-    if (robot1Z == 130 && robot1X < 130)
+    if (robot1Z >= 130 && robot1X < 130)
     {
         robot1X += constant/(360/angleStep);
         robot1AngleX = 0;
@@ -1169,6 +1257,55 @@ void robot1Animation(int time)
     //glutPostRedisplay();
 
     glutTimerFunc(1,robot1Animation,time);
+
+
+}
+
+
+void robot3Animation(int time)
+{
+
+
+    if (robot3Z >= 130 && robot3X < 130)
+    {
+        robot3X += constant/(360/angleStep);
+        robot3AngleX = 0;
+        robot3AngleZ -= angleStep;
+        robot3AngleY = 90;
+
+    }
+    else if (robot3X >= 130 && robot3Z > -130)
+    {
+        robot3Z -= constant/(360/angleStep);
+        robot3AngleZ = 0;
+        robot3AngleX -= angleStep;
+        robot3AngleY = 180;
+
+    }
+    else if (robot3Z <= -130 && robot3X > -130)
+    {
+        robot3X -= constant/(360/angleStep);
+        robot3AngleX = 0;
+        robot3AngleZ += angleStep;
+        robot3AngleY = 270;
+
+    }
+    else if (robot3X <= -130 && robot3Z < 130)
+    {
+        robot3Z += constant/(360/angleStep);
+        robot3AngleX += angleStep;
+        robot3AngleZ = 0;
+        robot3AngleY = 0;
+
+    }
+
+
+    //robot1Z += (r * 2 * M_PI)/(360/angleStep) ;
+    //robot1AngleX += angleStep;
+
+    //glutPostRedisplay();
+
+    glutTimerFunc(1,robot3Animation,time);
 
 
 }
@@ -1291,6 +1428,13 @@ void initialise(void)
     glLightf(GL_LIGHT2, GL_SPOT_CUTOFF, 89.0);
     glLightf(GL_LIGHT2, GL_SPOT_EXPONENT,90.0);
 
+    glEnable(GL_LIGHT4);
+    glLightfv(GL_LIGHT4, GL_AMBIENT, grey);
+    glLightfv(GL_LIGHT4, GL_DIFFUSE, white);
+    glLightfv(GL_LIGHT4, GL_SPECULAR, white);
+    glLightf(GL_LIGHT4, GL_SPOT_CUTOFF, 80.0);
+    glLightf(GL_LIGHT4, GL_SPOT_EXPONENT,80.0);
+
 
     glMaterialfv(GL_FRONT, GL_SPECULAR, white);
     glMaterialf(GL_FRONT, GL_SHININESS, 50);
@@ -1312,7 +1456,7 @@ void initialise(void)
 
     if(pass ==1){
            glutTimerFunc(10,robot1Animation,0);
-   glutTimerFunc(10,robot2Animation,0);
+   glutTimerFunc(10,robot3Animation,0);
    glutTimerFunc(10,light,0);
    glutTimerFunc(10,fps,0);
    pass = 0;}
@@ -1363,6 +1507,14 @@ void display(void)
     glPopMatrix();
 
     glPushMatrix();
+        glTranslatef(robot3X,520,robot3Z);
+        glRotatef(robot3AngleY - 90,0,1,0);
+        glLightfv(GL_LIGHT4, GL_POSITION, spot_pos);   //light position
+        glLightfv(GL_LIGHT4, GL_SPOT_DIRECTION, SPOT_DIRECTION);
+    glPopMatrix();
+
+
+    glPushMatrix();
         glTranslatef(0,rocketHeight-10,-23);
         glRotatef(270 + rocketRotation,0,1,0);
         glLightfv(GL_LIGHT2, GL_POSITION, spot_pos);   //light position
@@ -1397,19 +1549,24 @@ void display(void)
     glPopMatrix();
 
 
-    glPushMatrix();
+    //glPushMatrix();
 
-        glTranslatef(robot2x, 495, robot2z);
-                glScalef (1.8,1.8,1.8);
+        //glTranslatef(robot2x, 495, robot2z);
+                //glScalef (1.8,1.8,1.8);
 
-        glRotatef(90,0,1,0);
-        drawRobot2();
-    glPopMatrix();
+        //glRotatef(90,0,1,0);
+        //drawRobot2();
+    //glPopMatrix();
 
 
     glPushMatrix();
         glTranslatef(robot1X, 494.5, robot1Z);
         drawRobot1();
+    glPopMatrix();
+
+    glPushMatrix();
+        glTranslatef(robot3X, 494.5, robot3Z);
+        drawRobot3();
     glPopMatrix();
 
     glPushMatrix();
